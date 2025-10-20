@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
-    [SerializeField] float interactDistance = 4f;
+    [SerializeField] float interactDistance = 3.2f;
     [SerializeField] LayerMask interactLayer;
 
     Camera cam;

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] float walkSpeed = 12f;
-    [SerializeField] float runSpeed = 20f;
+    [SerializeField] float walkSpeed = 5f;
+    [SerializeField] float runSpeed = 8f;
     [SerializeField] float mouseSpeedX = 4f; // 마우스 회전 속도
     [SerializeField] float jump = 6f;
     [SerializeField] float gravity = 20f;
