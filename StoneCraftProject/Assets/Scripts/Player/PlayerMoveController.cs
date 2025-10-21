@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMoveController : MonoBehaviour
 {
-    public static PlayerMoveController Instance { get; private set; }
+    public static PlayerMoveController Instance { get; set; }
 
     [SerializeField] float walkSpeed = 5f;
     [SerializeField] float runSpeed = 8f;
@@ -18,22 +18,39 @@ public class PlayerMoveController : MonoBehaviour
     private float mouseLimitU = 50f;
     private float mouseLimitD = -55f;
 
+    public bool isCanMove;
+
     private CharacterController controller;
     Camera cam;
 
-    void Start()
+    private void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
         controller = GetComponent<CharacterController>();
         cam = Camera.main;
-
-        transform.position = SaveManager.Instance.savedPlayerData.pos;
+        isCanMove = true;
     }
 
     void Update()
     {
+        if (!isCanMove)
+        {
+            return;
+        }
+
         PlayerMove();
         PlayerCamMoveY();
+
+    }
+
+    public void MoveTo(float x, float y, float z)
+    {
+        transform.position = new Vector3(x, y, z);
+        Debug.Log("이동 완료 : " + x + ", " + y + ", " + z);
     }
 
     private void PlayerMove() // 전반적인 플레이어 이동 제어 함수
@@ -73,8 +90,7 @@ public class PlayerMoveController : MonoBehaviour
     }
     public Vector3 GetPlayerPosition()
     {
-        Vector3 p = transform.position;
-        return p;
+        return transform.position;
     }
 
 }

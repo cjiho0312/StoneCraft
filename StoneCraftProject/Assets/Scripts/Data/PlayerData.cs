@@ -9,6 +9,9 @@ public class PlayerData
     public int hammerGrade;
     public int pickaxeGrade;
 
-    public Vector3 pos;
+    public float posX;
+    public float posY;
+    public float posZ;
+
     public string lastSceneName; // 현재 위치 저장
 }

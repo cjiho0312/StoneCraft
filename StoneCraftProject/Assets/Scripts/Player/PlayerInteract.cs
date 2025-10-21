@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerInteract : MonoBehaviour
 {
+    public static PlayerInteract Instance { get; set; }
+
     [SerializeField] float interactDistance = 3.2f;
     [SerializeField] LayerMask interactLayer;
 
@@ -11,11 +14,18 @@ public class PlayerInteract : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
+
         cam = Camera.main;
         nowFocus = null;
     }
 
     void Update()
+    {
+        ShootRaycast();
+    }
+
+    void ShootRaycast()
     {
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         RaycastHit hit;
@@ -26,12 +36,15 @@ public class PlayerInteract : MonoBehaviour
         {
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
 
-            if (interactable != nowFocus)
+            if (interactable == null)
+                return;
+
+            if (interactable != nowFocus )
             {
                 nowFocus = interactable;
                 nowFocus.OnFocus();
             }
-            
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 nowFocus.OnInteract();
@@ -46,4 +59,11 @@ public class PlayerInteract : MonoBehaviour
             }
         }
     }
+
+
+    public void DeleteFocus()
+    {
+        nowFocus = null;
+    }
+
 }
