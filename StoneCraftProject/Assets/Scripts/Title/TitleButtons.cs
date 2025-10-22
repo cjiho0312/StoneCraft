@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class TitleButtons : MonoBehaviour
 {
-    public void StartButton()
+    public void GameButton()
     {
         Debug.Log("Start Button");
         SceneManager.LoadScene("TestScene");

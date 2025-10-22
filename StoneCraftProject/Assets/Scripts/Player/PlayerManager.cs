@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
 
     PlayerMoveController playerMoveController;
     PlayerInteract playerInteract;
+    Animator playerAnimator;
 
     public int money = 0;
     public int toolGrade = 0;
@@ -39,6 +40,7 @@ public class PlayerManager : MonoBehaviour
     {
         playerMoveController = PlayerMoveController.Instance;
         playerInteract = PlayerInteract.Instance;
+        playerAnimator = playerMoveController.gameObject.GetComponent<Animator>();
     }
 
     public bool SpendMoney(int amount)
@@ -63,24 +65,28 @@ public class PlayerManager : MonoBehaviour
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
                     currentState = PlayerState.IDLE;
+                    playerAnimator.SetInteger("PosMoveState", 0);
                     break;
 
                 case PlayerState.WALKING:
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
                     currentState = PlayerState.WALKING;
+                    playerAnimator.SetInteger("PosMoveState", 1);
                     break;
 
                 case PlayerState.RUNNING:
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
                     currentState = PlayerState.RUNNING;
+                    playerAnimator.SetInteger("PosMoveState", 2);
                     break;
 
                 case PlayerState.JUMPING:
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
                     currentState = PlayerState.JUMPING;
+                    playerAnimator.SetTrigger("Jumping");
                     break;
 
                 case PlayerState.MINNING:
@@ -99,6 +105,7 @@ public class PlayerManager : MonoBehaviour
                     playerInteract.enabled = false;
                     playerMoveController.isCanMove = false;
                     currentState = PlayerState.NONE;
+                    playerAnimator.SetInteger("PosMoveState", 0);
                     break;
 
                 default:
