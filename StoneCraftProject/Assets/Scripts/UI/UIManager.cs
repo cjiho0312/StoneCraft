@@ -17,6 +17,8 @@ public class PauseUIManager : MonoBehaviour
         Instance = this;
         PauseCanvas.enabled = false;
         isOpenPauseMenu = false;
+        PState = PlayerState.IDLE;
+        Time.timeScale = 1f;
     }
 
     private void Start()

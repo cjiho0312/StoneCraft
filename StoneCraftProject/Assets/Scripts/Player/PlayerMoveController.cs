@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMoveController : MonoBehaviour
@@ -44,13 +45,13 @@ public class PlayerMoveController : MonoBehaviour
 
         PlayerMove();
         PlayerCamMoveY();
-
     }
 
     public void MoveTo(float x, float y, float z)
     {
         transform.position = new Vector3(x, y, z);
-        Debug.Log("이동 완료 : " + x + ", " + y + ", " + z);
+        Debug.Log($"{gameObject.name} 이동 {x}, {y}, {z}");
+        Debug.Log($"현재 위치 : {transform.position}");
     }
 
     private void PlayerMove() // 전반적인 플레이어 이동 제어 함수

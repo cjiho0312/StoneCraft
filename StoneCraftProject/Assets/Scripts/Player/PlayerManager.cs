@@ -16,10 +16,13 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
     public PlayerState currentState;
-    public PlayerData playerData { get; private set; }
 
     PlayerMoveController playerMoveController;
     PlayerInteract playerInteract;
+
+    public int money = 0;
+    public int toolGrade = 0;
+    public int pickaxeGrade = 0;
 
 
     private void Awake()
@@ -34,52 +37,20 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        SaveManager saveManager = SaveManager.Instance;
-
-        if (saveManager != null)
-            playerData = saveManager.savedPlayerData;
-        else
-            playerData = new PlayerData();
-
         playerMoveController = PlayerMoveController.Instance;
         playerInteract = PlayerInteract.Instance;
-
-        currentState = PlayerState.IDLE;
-
-        SetPlayerStateFromLoadData();
     }
 
-    public bool SpendGold(int amount)
+    public bool SpendMoney(int amount)
     {
-        if (playerData.gold < amount) return false;
-        playerData.gold -= amount;
+        if (money < amount) return false;
+        money -= amount;
         return true;
     }
 
-    public void AddGold(int amount)
+    public void AddMoney(int amount)
     {
-        playerData.gold += amount;
-    }
-
-    public void SetPlayerStateFromLoadData()
-    {
-        SaveManager saveManager = SaveManager.Instance;
-
-        Debug.Log("SetPlayerStateFromLoadData()");
-        Debug.Log(saveManager.savedPlayerData.posX + " " +  saveManager.savedPlayerData.posY + " " + saveManager.savedPlayerData.posZ);
-
-        ChangePlayerState(PlayerState.IDLE);
-        PlayerMoveController.Instance.MoveTo(saveManager.savedPlayerData.posX, saveManager.savedPlayerData.posY, saveManager.savedPlayerData.posZ);
-    }
-
-    public void ApplyLoadedData()
-    {
-        SaveManager saveManager = SaveManager.Instance;
-
-        playerData = SaveManager.Instance.savedPlayerData;
-
-        if (PlayerMoveController.Instance != null)
-            PlayerMoveController.Instance.MoveTo(saveManager.savedPlayerData.posX, saveManager.savedPlayerData.posY, saveManager.savedPlayerData.posZ);
+        money += amount;
     }
 
     public void ChangePlayerState(PlayerState newState)

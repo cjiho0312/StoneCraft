@@ -53,7 +53,7 @@ public class MineManager : MonoBehaviour
 
     IEnumerator Mining(MineBase mine)
     {
-        float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.playerData.pickaxeGrade);
+        float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.pickaxeGrade);
 
         pickAnimator.SetBool("isMine", true);
 

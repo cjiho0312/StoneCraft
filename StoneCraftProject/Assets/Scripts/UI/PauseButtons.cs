@@ -5,18 +5,15 @@ public class PauseButtons : MonoBehaviour
 {
     public void SaveButton()
     {
-        if (SaveManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            SaveManager.Instance.SavePlayerData();
+            GameManager.Instance.SaveGame();
             Debug.Log("게임 저장 완료");
         }
     }
 
     public void LoadButton()
     {
-        SaveManager.Instance.LoadPlayerData();
-        Debug.Log("게임 불러오기 완료");
-
         // 씬 리로드
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
