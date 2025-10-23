@@ -17,11 +17,11 @@ public class Pickaxe : MonoBehaviour
             case (int)PickaxeGrade.WOOD:
                 return 1f;
             case (int)PickaxeGrade.STONE:
-                return 1.5f;
+                return 1.3f;
             case (int)PickaxeGrade.IRON:
                 return 2f;
             case (int)PickaxeGrade.DIAMOND:
-                return 3f;
+                return 3.3f;
             default:
                 return 0f;
         }

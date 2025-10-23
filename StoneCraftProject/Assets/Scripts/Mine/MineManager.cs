@@ -30,9 +30,6 @@ public class MineManager : MonoBehaviour
         currentMine = mine;
         currentMine.isBeingMined = true;
 
-        float d = mine.durability;
-        StoneData s = mine.GetStoneType();
-
         playerManager.ChangePlayerState(PlayerState.MINING);
 
         StartCoroutine(StartMiningAfterGrounded(mine));
@@ -66,17 +63,21 @@ public class MineManager : MonoBehaviour
     IEnumerator Mining(MineBase mine)
     {
         float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.pickaxeGrade);
+        float d = mine.durability;
+        StoneData s = mine.GetStoneType();
 
         while (isMining)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(d / pickSpeed);
+            // LimeStone의 경우 -> Wood 10초, Stone 7.69....초, Iron 5초, Diamond 3.03..초
 
             if (!isMining)
             {
                 break;
             }
 
-            Debug.Log("mine에서 광석 획득");
+            Debug.Log($"{mine.gameObject.name}에서 {s.stoneID} 획득");
+            // 여따가 보상 추가
         }
     }
 
