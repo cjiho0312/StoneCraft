@@ -7,7 +7,7 @@ public enum PlayerState
     WALKING,
     RUNNING,
     JUMPING,
-    MINNING,
+    MINING,
     CRAFTING,
     NONE // Pause µî
 }
@@ -64,6 +64,7 @@ public class PlayerManager : MonoBehaviour
                 case PlayerState.IDLE:
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
+                    playerAnimator.SetBool("Mining", false);
                     currentState = PlayerState.IDLE;
                     playerAnimator.SetInteger("PosMoveState", 0);
                     break;
@@ -71,6 +72,7 @@ public class PlayerManager : MonoBehaviour
                 case PlayerState.WALKING:
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
+                    playerAnimator.SetBool("Mining", false);
                     currentState = PlayerState.WALKING;
                     playerAnimator.SetInteger("PosMoveState", 1);
                     break;
@@ -78,6 +80,7 @@ public class PlayerManager : MonoBehaviour
                 case PlayerState.RUNNING:
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
+                    playerAnimator.SetBool("Mining", false);
                     currentState = PlayerState.RUNNING;
                     playerAnimator.SetInteger("PosMoveState", 2);
                     break;
@@ -89,21 +92,24 @@ public class PlayerManager : MonoBehaviour
                     playerAnimator.SetTrigger("Jumping");
                     break;
 
-                case PlayerState.MINNING:
+                case PlayerState.MINING:
                     playerInteract.enabled = false;
                     playerMoveController.isCanMove = false;
-                    currentState = PlayerState.MINNING;
+                    currentState = PlayerState.MINING;
+                    playerAnimator.SetBool("Mining", true);
                     break;
 
                 case PlayerState.CRAFTING:
                     playerInteract.enabled = false;
                     playerMoveController.isCanMove = false;
+                    playerAnimator.SetBool("Mining", false);
                     currentState = PlayerState.CRAFTING;
                     break;
 
                 case PlayerState.NONE:
                     playerInteract.enabled = false;
                     playerMoveController.isCanMove = false;
+                    playerAnimator.SetBool("Mining", false);
                     currentState = PlayerState.NONE;
                     playerAnimator.SetInteger("PosMoveState", 0);
                     break;

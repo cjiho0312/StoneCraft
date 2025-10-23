@@ -45,7 +45,7 @@ public class PlayerInteract : MonoBehaviour
                 nowFocus.OnFocus();
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
             {
                 nowFocus.OnInteract();
             }

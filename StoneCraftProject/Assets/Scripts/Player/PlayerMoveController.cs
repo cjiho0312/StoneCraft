@@ -116,4 +116,21 @@ public class PlayerMoveController : MonoBehaviour
         Debug.Log($"현재 위치 : {transform.position}");
     }
 
+    public IEnumerator ApplyGravityUntilGrounded()
+    {
+        if (controller.isGrounded)
+            yield break;
+
+        float tempVelocity = verticalVelocity;
+
+        while (!controller.isGrounded)
+        {
+            tempVelocity -= gravity * Time.deltaTime;
+            controller.Move(Vector3.up * tempVelocity * Time.deltaTime);
+            yield return null;
+        }
+
+        // 착지 후 속도 초기화
+        verticalVelocity = -1f;
+    }
 }

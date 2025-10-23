@@ -4,19 +4,22 @@ using UnityEngine;
 public class MineManager : MonoBehaviour
 {
     [SerializeField] Pickaxe pick;
-    Animator pickAnimator;
     Coroutine miningCoroutine;
     bool isMining;
     MineBase currentMine;
+    PauseUIManager pauseUI;
 
     private void Start()
     {
-        pickAnimator = pick.gameObject.GetComponent<Animator>();
         this.isMining = false;
+        pauseUI = PauseUIManager.Instance;
     }
 
     public void StartMining(MineBase mine)
     {
+        var playerManager = PlayerManager.Instance;
+        playerManager.ChangePlayerState(PlayerState.IDLE);
+
         if (this.isMining || mine.isBeingMined)
             return;
         
@@ -27,35 +30,42 @@ public class MineManager : MonoBehaviour
         currentMine = mine;
         currentMine.isBeingMined = true;
 
-        var playerManager = PlayerManager.Instance;
         float d = mine.durability;
         StoneData s = mine.GetStoneType();
-        playerManager.ChangePlayerState(PlayerState.MINNING);
 
-        miningCoroutine = StartCoroutine(Mining(mine));
+        playerManager.ChangePlayerState(PlayerState.MINING);
+
+        StartCoroutine(StartMiningAfterGrounded(mine));
     }
 
     private void Update()
     {
         // 채굴 중일 때만 입력 감시
-        if (isMining)
+        if (isMining && !pauseUI.GetisOpenPauseMenu)
         {
             if (Input.GetKeyDown(KeyCode.E) ||
                 Input.GetKeyDown(KeyCode.W) ||
                 Input.GetKeyDown(KeyCode.A) ||
                 Input.GetKeyDown(KeyCode.S) ||
-                Input.GetKeyDown(KeyCode.D))
+                Input.GetKeyDown(KeyCode.D) ||
+                Input.GetMouseButtonDown(0))
             {
                 StopMining();
             }
         }
     }
 
+    private IEnumerator StartMiningAfterGrounded(MineBase mine)
+    {
+        yield return StartCoroutine(PlayerMoveController.Instance.ApplyGravityUntilGrounded());
+
+        // 착지 후 Mining 시작
+        miningCoroutine = StartCoroutine(Mining(mine));
+    }
+
     IEnumerator Mining(MineBase mine)
     {
         float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.pickaxeGrade);
-
-        pickAnimator.SetBool("isMine", true);
 
         while (isMining)
         {
@@ -84,8 +94,6 @@ public class MineManager : MonoBehaviour
 
         if (miningCoroutine != null)
             StopCoroutine(miningCoroutine);
-
-        pickAnimator.SetBool("isMine", false);
 
         PlayerInteract.Instance.DeleteFocus();
 

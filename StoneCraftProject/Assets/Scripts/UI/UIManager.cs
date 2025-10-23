@@ -11,6 +11,7 @@ public class PauseUIManager : MonoBehaviour
     PlayerState PState;
 
     List<Animator> pausedAnimators = new();
+    public bool GetisOpenPauseMenu {  get { return isOpenPauseMenu; } }
 
     private void Awake()
     {
