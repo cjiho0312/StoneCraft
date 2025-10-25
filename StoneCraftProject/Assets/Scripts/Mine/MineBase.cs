@@ -3,7 +3,7 @@ using UnityEngine.InputSystem.LowLevel;
 
 public abstract class MineBase : MonoBehaviour, IInteractable
 {
-    public abstract StoneData StoneType { get; }
+    public abstract Stone StoneType { get; }
     public abstract float durability { get; } // 채석장 기본 내구도
     public bool isBeingMined = false;
 
@@ -23,7 +23,7 @@ public abstract class MineBase : MonoBehaviour, IInteractable
 
     public abstract void OnInteract();
     
-    public virtual StoneData GetStoneType()
+    public virtual Stone GetStoneType()
     {
         Debug.Log($"Mining {StoneType.stoneID}");
         return StoneType;

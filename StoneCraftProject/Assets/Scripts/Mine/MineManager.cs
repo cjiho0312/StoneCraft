@@ -7,12 +7,12 @@ public class MineManager : MonoBehaviour
     Coroutine miningCoroutine;
     bool isMining;
     MineBase currentMine;
-    PauseUIManager pauseUI;
+    PauseUI pauseUI;
 
     private void Start()
     {
         this.isMining = false;
-        pauseUI = PauseUIManager.Instance;
+        pauseUI = PauseUI.Instance;
     }
 
     public void StartMining(MineBase mine)
@@ -64,7 +64,7 @@ public class MineManager : MonoBehaviour
     {
         float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.pickaxeGrade);
         float d = mine.durability;
-        StoneData s = mine.GetStoneType();
+        Stone s = mine.GetStoneType();
 
         while (isMining)
         {
