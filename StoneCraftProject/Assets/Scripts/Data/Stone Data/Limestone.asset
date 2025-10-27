@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b978f81b1e8451499bb9981fb838b33, type: 3}
+  m_Script: {fileID: 11500000, guid: 2fe6463b04bc77d46b5923227b965657, type: 3}
   m_Name: Limestone
   m_EditorClassIdentifier: 
-  stoneID: limestone
+  stoneID: 101
   baseValue: 10
   hitSound: {fileID: 0}
