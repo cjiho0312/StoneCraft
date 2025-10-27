@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     {
         PauseCanvas.gameObject.SetActive(true);
         AimCanvas.gameObject.SetActive(true);
-        //InventoryCanvas.gameObject.SetActive(true);
+        InventoryCanvas.gameObject.SetActive(true);
     }
 
     void Update()
