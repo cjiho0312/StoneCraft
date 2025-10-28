@@ -22,9 +22,11 @@ public class PlayerManager : MonoBehaviour
     Animator playerAnimator;
 
     public int money = 0;
-    public int toolGrade = 0;
-    public int pickaxeGrade = 0;
 
+    public Item currentItem;
+    public Transform handTransform;
+
+    private GameObject currentHandObject; // 손에 실제로 생성된 오브젝트
 
     private void Awake()
     {
@@ -41,6 +43,30 @@ public class PlayerManager : MonoBehaviour
         playerMoveController = PlayerMoveController.Instance;
         playerInteract = PlayerInteract.Instance;
         playerAnimator = playerMoveController.gameObject.GetComponent<Animator>();
+    }
+    public void SetCurrentItem(Item item)
+    {
+        currentItem = item;
+        UpdateHandItem();
+    }
+
+    private void UpdateHandItem()
+    {
+        // 기존 손 오브젝트 제거
+        if (currentHandObject != null)
+        {
+            Destroy(currentHandObject);
+            currentHandObject = null;
+        }
+
+        if (currentItem != null && currentItem.holdingPrefab != null)
+        {
+            // Prefab 생성
+            currentHandObject = Instantiate(currentItem.holdingPrefab, handTransform);
+            currentHandObject.transform.localPosition = Vector3.zero;
+            currentHandObject.transform.localRotation = Quaternion.identity;
+            currentHandObject.transform.localScale = Vector3.one;
+        }
     }
 
     public bool SpendMoney(int amount)

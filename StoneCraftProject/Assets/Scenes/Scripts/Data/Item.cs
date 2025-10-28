@@ -18,4 +18,6 @@ public class Item : ScriptableObject
     public Sprite itemImage; // 스프라이트
     public int grade;          // 도구 등급, 조각품 품질 등
     public int quantity = 1;   // 기본값 1 (도구는 1로 고정)
+
+    public GameObject holdingPrefab; // 플레이어 손에 들리는 3D 모델
 }

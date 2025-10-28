@@ -18,3 +18,4 @@ MonoBehaviour:
   itemImage: {fileID: 21300000, guid: 1fb46228a3bcb5042a763829cc07f9e5, type: 3}
   grade: 0
   quantity: 1
+  holdingPrefab: {fileID: 431352401811938347, guid: eebe5d144a0c6504baf61a4859c2b02e, type: 3}

@@ -16,13 +16,24 @@ public class QuickSlotManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
         UpdateSelectionUI();
+        UpdatePlayerHand();
     }
 
     private void Update()
     {
         if (InventoryUI.Instance != null && InventoryUI.Instance.IsOpen()) return; // 인벤토리 열려있으면 무시
 
+        if (PlayerManager.Instance.currentState == PlayerState.MINING ||
+            PlayerManager.Instance.currentState == PlayerState.CRAFTING ||
+            PlayerManager.Instance.currentState == PlayerState.NONE)
+        {
+            return;
+        }
         // 마우스 스크롤로 선택
         float scroll = Input.mouseScrollDelta.y;
         if (scroll != 0)
@@ -31,6 +42,7 @@ public class QuickSlotManager : MonoBehaviour
             else selectedIndex = (selectedIndex - 1 + quickSlots.Length) % quickSlots.Length;
 
             UpdateSelectionUI();
+            UpdatePlayerHand();
         }
     }
 
@@ -39,6 +51,19 @@ public class QuickSlotManager : MonoBehaviour
         if (selectionHighlight != null && quickSlots.Length > 0)
         {
             selectionHighlight.transform.position = quickSlots[selectedIndex].transform.position;
+        }
+    }
+
+    private void UpdatePlayerHand()
+    {
+        var slot = GetSelectedSlot();
+        if (slot != null && slot.item != null)
+        {
+            PlayerManager.Instance.SetCurrentItem(slot.item);
+        }
+        else
+        {
+            PlayerManager.Instance.SetCurrentItem(null);
         }
     }
 
@@ -65,5 +90,7 @@ public class QuickSlotManager : MonoBehaviour
             else
                 quickSlots[i].SetItem(null);
         }
+
+        UpdatePlayerHand();
     }
 }

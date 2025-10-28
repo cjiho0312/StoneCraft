@@ -6,9 +6,6 @@ public class PlayerData
 {
     public int money;
 
-    public int toolGrade;       // µµ±¸ µî±Þ
-    public int pickaxeGrade;    // °î±ªÀÌ µî±Þ
-
     public float posX;
     public float posY;
     public float posZ;
@@ -60,8 +57,6 @@ public class PlayerSaveManager : MonoBehaviour
         playerM.ChangePlayerState(PlayerState.IDLE);
 
         playerM.money = playerData.money;
-        playerM.toolGrade = playerData.toolGrade;
-        playerM.pickaxeGrade = playerData.pickaxeGrade;
     }
 
 
@@ -79,7 +74,5 @@ public class PlayerSaveManager : MonoBehaviour
         // var controller = player.GetComponent<PlayerController>();
 
         playerData.money = playerM.money;
-        playerData.toolGrade = playerM.toolGrade;
-        playerData.pickaxeGrade = playerM.pickaxeGrade;
     }
 }

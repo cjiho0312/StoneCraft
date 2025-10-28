@@ -10,6 +10,12 @@ public enum PickaxeGrade
 
 public class Pickaxe : MonoBehaviour
 {
+    public static Pickaxe Instance { get; private set; }
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public float GetPickaxeSpeed(int Index)
     {
         switch (Index)

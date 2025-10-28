@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MineManager : MonoBehaviour
 {
-    [SerializeField] Pickaxe pick;
     Coroutine miningCoroutine;
     bool isMining;
     MineBase currentMine;
@@ -62,7 +61,17 @@ public class MineManager : MonoBehaviour
 
     IEnumerator Mining(MineBase mine)
     {
-        float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.pickaxeGrade);
+        var pick = Pickaxe.Instance;
+
+        if (PlayerManager.Instance.currentItem == null)
+        {
+            Debug.Log("채굴할 도구를 들고 있지 않음");
+            yield break;
+        }
+
+        Debug.Log("곡괭이 grade : " + PlayerManager.Instance.currentItem.grade);
+
+        float pickSpeed = pick.GetPickaxeSpeed(PlayerManager.Instance.currentItem.grade);
         float d = mine.durability;
         Stone s = mine.GetStoneType();
 
