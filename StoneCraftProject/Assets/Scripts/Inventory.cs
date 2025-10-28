@@ -5,18 +5,25 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance { get; private set; }
-    private List<Slot> slotList;
 
-    private int maxQuantity = 20;
+    [SerializeField] private int maxQuantity = 20;
+    [SerializeField] private List<Slot> slotList = new List<Slot>(); // ui용 슬롯 리스트
+    private Dictionary<int, List<Slot>> itemMap = new Dictionary<int, List<Slot>>(); // 슬롯 목록, 아이템id
 
+    
     private void Awake()
     {
-        Instance = this;
-        
-        var slots = GetComponentsInChildren<Slot>();
-        foreach( var slot in slots )
+        if (Instance == null)
         {
-            slotList.Add(slot); // 자식 slot들 가져오기
+            Instance = this;
+        }
+        
+        slotList.Clear();
+        slotList.AddRange(GetComponentsInChildren<Slot>());
+
+        foreach (var s in slotList)
+        {
+            s.OnCleared += HandleSlotCleared;
         }
     }
     // 추후 세이브 데이터에서 불러온 뒤 정렬해야 함
@@ -26,109 +33,143 @@ public class Inventory : MonoBehaviour
         
     }
 
-    void Update()
+    public int AddItem(Item originalItem) // Add 후 남은 양을 반환함.
     {
-        
-    }
+        if (originalItem == null) return 0;
+  
+        int remaining = originalItem.quantity;
 
-    public int GetItem(Item thisItem) // Add 후 남은 양을 반환함.
-    {
-        int thisItemQuantity = thisItem.quantity;
-
-        for (int i = 0; i < slotList.Count; i++)
+        // 동일한 아이템을 가진 슬롯이 이미 존재하는지 탐색
+        if (itemMap.TryGetValue(originalItem.itemId, out var sameItemSlots))
         {
-            if (thisItemQuantity == 0)
+            foreach (var slot in sameItemSlots)
             {
-                break;
-            }
-
-            if (slotList[i].item.itemId == thisItem.itemId && slotList[i].item.quantity < maxQuantity)
-            {
-                if (slotList[i].item.quantity >= maxQuantity)
-                {
+                if (slot.item == null)
                     continue;
-                }
-                else if (slotList[i].item.quantity + thisItemQuantity > maxQuantity)
+
+                int current = slot.item.quantity;
+                int canAdd = maxQuantity - current;
+
+                if (canAdd > 0)
                 {
-                    int increase = maxQuantity - slotList[i].item.quantity;
-                    slotList[i].IncreaseQuantity(increase);
-                    thisItemQuantity -= increase;
+                    int add = Mathf.Min(remaining, canAdd);
+                    slot.IncreaseQuantity(add);
+                    remaining -= add;
+
+                    if (remaining <= 0)
+                        return 0;
                 }
-                else
-                {
-                    slotList[i].IncreaseQuantity(thisItemQuantity);
-                    thisItemQuantity = 0;
-                }
-            }
-        }
-        
-        for (int i = 0; i < slotList.Count; i++)
-        {
-            if (thisItemQuantity == 0)
-            {
-                break;
-            }
-            if (slotList[i].item == null)
-            {
-                thisItem.quantity = thisItemQuantity;
-                slotList[i].SetItem(thisItem);
             }
         }
 
-        if(thisItemQuantity > 0)
+        // 빈 슬롯에 새 아이템 추가
+        foreach (var slot in slotList)
+        {
+            if (remaining <= 0)
+                break;
+
+            if (slot.item == null)
+            {
+                // ScriptableObject 복제해서 저장
+                Item newItem = Instantiate(originalItem);
+                newItem.quantity = Mathf.Min(remaining, maxQuantity);
+                slot.SetItem(newItem);
+
+                // 딕셔너리에 등록
+                if (!itemMap.ContainsKey(newItem.itemId))
+                    itemMap[newItem.itemId] = new List<Slot>();
+                itemMap[newItem.itemId].Add(slot);
+
+                remaining -= newItem.quantity;
+            }
+        }
+
+        if (remaining > 0)
         {
             Debug.Log("인벤토리가 가득 찼습니다!");
-            return thisItemQuantity;
         }
-        else
-        {
-            return 0;
-        }
+
+        QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();
+
+        return remaining;
     }
 
-    public bool DecreaseItem(int decreaseItemId, int decreaseQuantity) // 해당 아이템의 양이 충분하다면 true, 부족하다면 false 반환
-    {
-        int hasQuantity = 0;
 
-        for (int i = 0; i < slotList.Count; i++)
+    public bool RemoveItem(int itemId, int quantity) // 아이템을 지정한 수만큼 차감. 성공시 true 반환함.
+    {
+        if (!itemMap.TryGetValue(itemId, out var slots))
         {
-            if (slotList[i].item.itemId == decreaseItemId)
-            {
-                hasQuantity += slotList[i].item.quantity;
-            }
+            Debug.Log("해당 아이템이 없습니다!");
+            return false;
         }
 
-        if (hasQuantity < decreaseQuantity)
+        int total = 0;
+
+        foreach (var s in slots)
+        {
+            if (s.item != null)
+                total += s.item.quantity;
+        }
+
+        if (total < quantity)
         {
             Debug.Log("아이템이 부족합니다!");
             return false;
         }
 
-        int remainingQ = decreaseQuantity;
+        int remaining = quantity;
 
-        for (int i = 0; i < slotList.Count; i++)
+        for (int i = slots.Count - 1; i >= 0 && remaining > 0; i--)
         {
-            if (remainingQ == 0)
-            {
-                break;
-            }
+            var slot = slots[i];
+            if (slot.item == null)
+                continue;
 
-            if (slotList[i].item.itemId == decreaseItemId)
-            {
-                if (slotList[i].item.quantity < remainingQ)
-                {
-                    int tempQ = slotList[i].item.quantity;
-                    remainingQ -= tempQ;
-                    slotList[i].DecreaseQuantity(tempQ);
-                }
-                else
-                {
-                    slotList[i].DecreaseQuantity(remainingQ);
-                    remainingQ = 0;
-                }
-            }
+            int decrease = Mathf.Min(slot.item.quantity, remaining);
+            slot.DecreaseQuantity(decrease);
+            remaining -= decrease;
+
+            if (slot.item == null)
+                slots.RemoveAt(i);
         }
 
+        // 딕셔너리에 남은 슬롯이 없으면 항목 제거
+        if (slots.Count == 0)
+        {
+            itemMap.Remove(itemId);
+        }
+
+        QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();
+
         return true;
+    }
+
+    private void HandleSlotCleared(Slot clearedSlot, int clearedItemId)
+    {
+        if (clearedItemId < 0) return;
+
+        if (!itemMap.ContainsKey(clearedItemId)) return;
+
+        var slots = itemMap[clearedItemId];
+        slots.Remove(clearedSlot);
+
+        if (slots.Count == 0)
+        {
+            itemMap.Remove(clearedItemId);
+        }
+    }
+
+    public Slot GetSlotByIndex(int index)
+    {
+        if (index < 0 || index >= slotList.Count) return null;
+        return slotList[index];
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var s in slotList)
+        {
+            s.OnCleared -= HandleSlotCleared;
+        }
     }
 }
