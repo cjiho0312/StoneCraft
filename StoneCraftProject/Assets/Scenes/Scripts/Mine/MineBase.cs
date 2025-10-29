@@ -25,7 +25,7 @@ public abstract class MineBase : MonoBehaviour, IInteractable
     
     public virtual Stone GetStoneType()
     {
-        Debug.Log($"Mining {StoneType.stoneID}");
+        Debug.Log($"Mining {StoneType.stoneName}");
         return StoneType;
     }
 }

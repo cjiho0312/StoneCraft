@@ -7,8 +7,12 @@ public class MineManager : MonoBehaviour
     bool isMining;
     MineBase currentMine;
     PauseUI pauseUI;
+    GameObject RewardStone;
 
     [SerializeField] Cart cart;
+
+    [SerializeField] GameObject LimestoneObject;
+
 
     private void Start()
     {
@@ -87,16 +91,12 @@ public class MineManager : MonoBehaviour
                 break;
             }
 
-            Debug.Log($"{mine.gameObject.name}¿¡¼­ {s.stoneID} È¹µæ");
+            Debug.Log($"{mine.gameObject.name}¿¡¼­ {s.stoneName} È¹µæ");
 
-            Reward();
+            Reward(mine);
         }
     }
 
-    private void Reward() // º¸»ó
-    {
-        // Ä«Æ® À§¿¡ µ¹ »ý¼º
-    }
 
     private void StopMining()
     {
@@ -119,5 +119,29 @@ public class MineManager : MonoBehaviour
 
         Debug.Log("Ã¤±¼ Áß´ÜµÊ");
     }    
+
+    private void Reward(MineBase mine) // º¸»ó
+    {
+        Vector3 CreationPos = cart.GetCreationAreaPos();
+        int stoneId = mine.StoneType.stoneID;
+        
+
+        switch (stoneId)
+        {
+            case 101: // limestone
+                RewardStone = LimestoneObject;
+                break;
+
+            case 102:
+                break;
+
+            default:
+                break;
+
+        }
+
+        GameObject Stone = Instantiate(RewardStone, CreationPos, Quaternion.identity);
+        Stone.SetActive(true);
+    }
 
 }

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Limestone
   m_EditorClassIdentifier: 
   stoneID: 101
+  stoneName: Limestone
   baseValue: 10
   hitSound: {fileID: 0}

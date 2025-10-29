@@ -3,7 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Stone")]
 public class Stone : ScriptableObject
 {
-    public string stoneID;
+    public int stoneID;
+    public string stoneName;
     public int baseValue;
     public AudioClip hitSound;
 }

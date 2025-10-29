@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Cart : MonoBehaviour
 {
-    private Vector3 creationPos;
-    public Vector3 GetCreationPos() { return creationPos; }
+    [SerializeField] private GameObject CreationArea;
+    public Vector3 GetCreationAreaPos() { return CreationArea.transform.position; }
 
     void Start()
     {
