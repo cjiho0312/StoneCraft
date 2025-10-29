@@ -36,7 +36,7 @@ public class AimSwitch : MonoBehaviour
             { AimState.NONE, aimNone },
             { AimState.MINE, aimMine },
             //{ AimState.SCULPT, aimSculpt },
-            //{ AimState.ELSE, aimElse }
+            { AimState.ELSE, aimElse }
         };
 
         foreach (var kvp in aimDictionary)

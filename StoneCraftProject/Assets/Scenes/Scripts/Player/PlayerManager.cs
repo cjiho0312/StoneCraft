@@ -9,6 +9,7 @@ public enum PlayerState
     JUMPING,
     MINING,
     CRAFTING,
+    PULLINGCART,
     NONE // Pause µî
 }
 
@@ -130,6 +131,13 @@ public class PlayerManager : MonoBehaviour
                     playerMoveController.isCanMove = false;
                     playerAnimator.SetBool("Mining", false);
                     currentState = PlayerState.CRAFTING;
+                    break;
+
+                case PlayerState.PULLINGCART:
+                    playerInteract.enabled = false;
+                    playerMoveController.isCanMove = true;
+                    playerAnimator.SetBool("Mining", false);
+                    currentState = PlayerState.PULLINGCART;
                     break;
 
                 case PlayerState.NONE:
