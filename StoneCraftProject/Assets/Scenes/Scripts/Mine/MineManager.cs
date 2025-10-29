@@ -8,6 +8,8 @@ public class MineManager : MonoBehaviour
     MineBase currentMine;
     PauseUI pauseUI;
 
+    [SerializeField] Cart cart;
+
     private void Start()
     {
         this.isMining = false;
@@ -86,8 +88,14 @@ public class MineManager : MonoBehaviour
             }
 
             Debug.Log($"{mine.gameObject.name}에서 {s.stoneID} 획득");
-            // 여따가 보상 추가
+
+            Reward();
         }
+    }
+
+    private void Reward() // 보상
+    {
+        // 카트 위에 돌 생성
     }
 
     private void StopMining()
@@ -111,6 +119,5 @@ public class MineManager : MonoBehaviour
 
         Debug.Log("채굴 중단됨");
     }    
-
 
 }
