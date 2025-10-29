@@ -22,7 +22,7 @@ public class PlayerMoveController : MonoBehaviour
 
     public bool isCanMove;
 
-    private CharacterController controller;
+    CharacterController controller;
     PlayerManager playerManager;
     Camera cam;
 

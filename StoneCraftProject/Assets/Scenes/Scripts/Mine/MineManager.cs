@@ -141,6 +141,7 @@ public class MineManager : MonoBehaviour
         }
 
         GameObject Stone = Instantiate(RewardStone, CreationPos, Quaternion.identity);
+        Stone.transform.parent = cart.transform;
         Stone.SetActive(true);
     }
 
