@@ -1,14 +1,17 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cart : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject CreationArea;
-    public Vector3 GetCreationAreaPos() { return CreationArea.transform.position; }
+
+    public List<int> stoneList; // 카트가 가지고 있는 돌 ID 목록
 
     private bool isPulling;
     private bool blockInteract;
+    public Vector3 GetCreationAreaPos() { return CreationArea.transform.position; }
 
     private void Awake()
     {
@@ -90,5 +93,20 @@ public class Cart : MonoBehaviour, IInteractable
     {
         yield return new WaitForSeconds(0.1f);
         blockInteract = false;
+    }
+
+    public void TakeStones()
+    {
+        var Stones = GetComponentsInChildren<StoneObject>();
+        
+        foreach (StoneObject s in Stones)
+        {
+            stoneList.Add(s.GetStoneID()); // 리스트에 추가
+        }
+
+        foreach (StoneObject s in Stones)
+        {
+            Destroy(s.gameObject); // 오브젝트 삭제
+        }
     }
 }
