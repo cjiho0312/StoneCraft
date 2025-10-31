@@ -19,8 +19,6 @@ public class StoneStorageManager : MonoBehaviour
 
     public void GetStonesInStorage(List <int> list)
     {
-        
-
-
+        // cart에서 가져온 ((int)StoneID)list를 StoneStorage에 옮기는 작업
     }
 }
