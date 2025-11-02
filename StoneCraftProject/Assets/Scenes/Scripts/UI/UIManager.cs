@@ -101,5 +101,6 @@ public class UIManager : MonoBehaviour
                 inventoryUI.CloseInvenUI();
             }
         }
+
     }
 }

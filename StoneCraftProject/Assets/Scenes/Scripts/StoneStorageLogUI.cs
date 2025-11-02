@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,8 @@ public class StoneStorageLogUI : MonoBehaviour
     [SerializeField] Sprite LimestoneSprite;
     string[] StoneNameString = {"Limestone", ".", ".", ".", ".", "." };
 
+    bool canCloseUI;
+
     private void Awake()
     {
         StoneStorageLogCanvas = GetComponent<Canvas>();
@@ -21,33 +24,45 @@ public class StoneStorageLogUI : MonoBehaviour
 
     private void Start()
     {
+        canCloseUI = false;
         StoneStorageLogCanvas.enabled = false;
     }
 
     private void Update()
     {
-        if (StoneStorageLogCanvas.enabled)
+        if (!StoneStorageLogCanvas.enabled) return;
+
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
         {
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
-            {
-                CloseStoneStorageLogUI();
-            }
+            CloseStoneStorageLogUI();
         }
+        
     }
 
     public void OpenStoneStorageLogUI()
     {
+        canCloseUI = false;
+
+        PlayerInteract.Instance.SetCanInteract(false);
         StoneStorageLogUpdate();
         Pause.Instance.OnPause();
-        Cursor.lockState = CursorLockMode.Locked;
+
+        Cursor.lockState = CursorLockMode.Locked; // OnPause에서 마우스 풀어버려서 다시 잠굼
+        Cursor.visible = false;
+
         StoneStorageLogCanvas.enabled = true;
+        StartCoroutine(Delay());
     }
 
     public void CloseStoneStorageLogUI()
     {
+        if (!canCloseUI) { return; }
+
         DestroyLog();
         Pause.Instance.OffPause();
         StoneStorageLogCanvas.enabled = false;
+
+        PlayerInteract.Instance.SetCanInteract(true);
     }
 
     private void StoneStorageLogUpdate()
@@ -84,5 +99,11 @@ public class StoneStorageLogUI : MonoBehaviour
         }
 
         list.Clear();
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForEndOfFrame();
+        canCloseUI = true;
     }
 }

@@ -12,6 +12,8 @@ public class PlayerInteract : MonoBehaviour
 
     Camera cam;
 
+    private bool canInteract = true;
+
     void Start()
     {
         Instance = this;
@@ -22,6 +24,7 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+        if (!canInteract) return;
         ShootRaycast();
     }
 
@@ -41,6 +44,7 @@ public class PlayerInteract : MonoBehaviour
 
             if (interactable != nowFocus )
             {
+                if (nowFocus != null) nowFocus.OnLoseFocus();
                 nowFocus = interactable;
                 nowFocus.OnFocus();
             }
@@ -60,6 +64,10 @@ public class PlayerInteract : MonoBehaviour
         }
     }
 
+    public void SetCanInteract(bool value)
+    {
+        canInteract = value;
+    }
 
     public void DeleteFocus()
     {

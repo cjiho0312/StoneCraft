@@ -13,11 +13,7 @@ public class StoneStorageLog : MonoBehaviour, IInteractable
     public void OnInteract()
     {
         Debug.Log("Interacting");
-
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
-        {
-            ui.OpenStoneStorageLogUI();
-        }
+        ui.OpenStoneStorageLogUI();
     }
 
     public void OnLoseFocus()

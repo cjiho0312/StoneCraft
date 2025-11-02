@@ -59,6 +59,8 @@ public class Cart : MonoBehaviour, IInteractable
     {
         if (blockInteract) return;
 
+        PlayerInteract.Instance.SetCanInteract(false);
+
         isPulling = true;
         blockInteract = true;
 
@@ -85,6 +87,8 @@ public class Cart : MonoBehaviour, IInteractable
 
         PlayerManager.Instance.ChangePlayerState(PlayerState.IDLE);
         StartCoroutine(BlockInteractShort());
+
+        PlayerInteract.Instance.SetCanInteract(true);
 
         Debug.Log("¼ö·¹ ²ø±â ³¡");
     }
