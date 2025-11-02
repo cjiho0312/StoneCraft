@@ -109,4 +109,9 @@ public class Cart : MonoBehaviour, IInteractable
             Destroy(s.gameObject); // 오브젝트 삭제
         }
     }
+
+    public void ClearList()
+    {
+        stoneList.Clear(); // 리스트 클리어
+    }
 }

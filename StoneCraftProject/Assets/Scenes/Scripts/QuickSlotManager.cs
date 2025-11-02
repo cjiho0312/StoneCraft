@@ -26,7 +26,7 @@ public class QuickSlotManager : MonoBehaviour
 
     private void Update()
     {
-        if (InventoryUI.Instance != null && InventoryUI.Instance.IsOpen()) return; // 인벤토리 열려있으면 무시
+        // if (InventoryUI.Instance != null && InventoryUI.Instance.IsOpen()) return; // 인벤토리 열려있으면 무시
 
         if (PlayerManager.Instance.currentState == PlayerState.MINING ||
             PlayerManager.Instance.currentState == PlayerState.CRAFTING ||
@@ -34,6 +34,7 @@ public class QuickSlotManager : MonoBehaviour
         {
             return;
         }
+
         // 마우스 스크롤로 선택
         float scroll = Input.mouseScrollDelta.y;
         if (scroll != 0)

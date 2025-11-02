@@ -16,8 +16,9 @@ public class CartStation : MonoBehaviour
         {
             cart = other.gameObject.GetComponent<Cart>();
 
-            cart.TakeStones(); // 카트에서 돌 리스트 빼고
-            StoneStorageManager.Instance.GetStonesInStorage(cart.stoneList); // 창고에 다시 추가
+            cart.TakeStones(); // 카트에서 돌 리스트 가져오기
+            StoneStorageManager.Instance.GetStonesInStorage(cart.stoneList); // 창고에 추가하기
+            cart.ClearList();
         }
     }
 }

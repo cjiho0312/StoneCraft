@@ -1,23 +1,33 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MineManager : MonoBehaviour
 {
+    public static MineManager Instance;
+
     Coroutine miningCoroutine;
-    bool isMining;
     MineBase currentMine;
-    PauseUI pauseUI;
     GameObject RewardStone;
+    bool isMining;
+    public bool GetIsMining {  get { return isMining; } }
 
     [SerializeField] Cart cart;
 
     [SerializeField] GameObject LimestoneObject;
 
 
+    private void Update()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     private void Start()
     {
         this.isMining = false;
-        pauseUI = PauseUI.Instance;
     }
 
     public void StartMining(MineBase mine)
@@ -40,22 +50,17 @@ public class MineManager : MonoBehaviour
         StartCoroutine(StartMiningAfterGrounded(mine));
     }
 
-    private void Update()
-    {
-        // 채굴 중일 때만 입력 감시
-        if (isMining && !pauseUI.GetisOpenPauseMenu)
-        {
-            if (Input.GetKeyDown(KeyCode.E) ||
-                Input.GetKeyDown(KeyCode.W) ||
-                Input.GetKeyDown(KeyCode.A) ||
-                Input.GetKeyDown(KeyCode.S) ||
-                Input.GetKeyDown(KeyCode.D) ||
-                Input.GetMouseButtonDown(0))
-            {
-                StopMining();
-            }
-        }
-    }
+    // private void Update()
+    // {
+    //     // 채굴 중일 때만 입력 감시
+    //     if (isMining && UIManager.Instance.IsPaused)
+    //     {
+    //         if (Input.anyKeyDown)
+    //         {
+    //             StopMining();
+    //         }
+    //     }
+    // }
 
     private IEnumerator StartMiningAfterGrounded(MineBase mine)
     {
@@ -98,7 +103,7 @@ public class MineManager : MonoBehaviour
     }
 
 
-    private void StopMining()
+    public void StopMining()
     {
         if (!isMining) return;
 

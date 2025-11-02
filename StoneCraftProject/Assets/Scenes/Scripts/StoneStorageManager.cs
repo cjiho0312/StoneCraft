@@ -17,8 +17,18 @@ public class StoneStorageManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        // savedata에서 StoneStorage 배열 받아서 집어넣기
+    }
+
     public void GetStonesInStorage(List <int> list)
     {
-        // cart에서 가져온 ((int)StoneID)list를 StoneStorage에 옮기는 작업
+        stoneStorage.AddStones(list);
+    }
+
+    public int [] GetStonesArrayfromStorage()
+    {
+        return stoneStorage.GetStonesArray();
     }
 }
