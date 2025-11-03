@@ -3,6 +3,7 @@ using UnityEngine;
 public class WorkManager : MonoBehaviour
 {
     public static WorkManager Instance;
+    [SerializeField] WorkUI workUI;
 
     private void Awake()
     {
@@ -14,6 +15,6 @@ public class WorkManager : MonoBehaviour
 
     public void StartWork()
     {
-        // UI 열기 및 플레이어 상태 변경
+        workUI.OpenWorkUI();
     }
 }

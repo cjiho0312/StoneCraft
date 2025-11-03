@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     PauseUI pauseUI;
     InventoryUI inventoryUI;
     StoneStorageLogUI stoneStorageLogUI;
+    WorkUI workUI;
 
 
     bool isOpenPause;
@@ -26,12 +27,13 @@ public class UIManager : MonoBehaviour
         AimCanvas.gameObject.SetActive(true);
         InventoryCanvas.gameObject.SetActive(true);
         QuickSlotCanvas.gameObject.SetActive(true);
-        // WorkCanvas.gameObject.SetActive(true);
+        WorkCanvas.gameObject.SetActive(true);
         StoneStorageLogCanvas.gameObject.SetActive(true);
 
         pauseUI = PauseCanvas.GetComponent<PauseUI>();
         inventoryUI = InventoryCanvas.GetComponent<InventoryUI>();
         stoneStorageLogUI = StoneStorageLogCanvas.GetComponent<StoneStorageLogUI>();
+        workUI = WorkCanvas.GetComponent<WorkUI>();
 
         isOpenPause = false;
     }
@@ -65,10 +67,10 @@ public class UIManager : MonoBehaviour
             {
                 inventoryUI.CloseInvenUI();
             }
-            // else if (WorkCanvas.enabled)
-            // {
-            // 
-            // }
+            else if (WorkCanvas.enabled)
+            {
+                workUI.CloseWorkUI();
+            }
             else if (StoneStorageLogCanvas.enabled)
             {
                 stoneStorageLogUI.CloseStoneStorageLogUI();

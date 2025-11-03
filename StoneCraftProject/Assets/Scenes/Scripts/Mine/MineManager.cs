@@ -50,18 +50,6 @@ public class MineManager : MonoBehaviour
         StartCoroutine(StartMiningAfterGrounded(mine));
     }
 
-    // private void Update()
-    // {
-    //     // 채굴 중일 때만 입력 감시
-    //     if (isMining && UIManager.Instance.IsPaused)
-    //     {
-    //         if (Input.anyKeyDown)
-    //         {
-    //             StopMining();
-    //         }
-    //     }
-    // }
-
     private IEnumerator StartMiningAfterGrounded(MineBase mine)
     {
         yield return StartCoroutine(PlayerMoveController.Instance.ApplyGravityUntilGrounded());
