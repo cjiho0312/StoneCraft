@@ -2643,6 +2643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 408297178}
   - component: {fileID: 408297177}
+  - component: {fileID: 408297179}
   m_Layer: 0
   m_Name: Item Manager
   m_TagString: Untagged
@@ -2678,6 +2679,18 @@ Transform:
   - {fileID: 992303360}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &408297179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408297176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0d7fe584b77514a8d306f9b145ee11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -5665,6 +5678,7 @@ GameObject:
   - component: {fileID: 797957971}
   - component: {fileID: 797957970}
   - component: {fileID: 797957972}
+  - component: {fileID: 797957973}
   m_Layer: 0
   m_Name: StoneList
   m_TagString: Untagged
@@ -5774,6 +5788,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &797957973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797957968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e6a3e0975c6004419d91cb81c4e4620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &802346072
 GameObject:
   m_ObjectHideFlags: 0

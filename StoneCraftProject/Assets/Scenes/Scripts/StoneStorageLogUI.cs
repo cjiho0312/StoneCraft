@@ -12,7 +12,6 @@ public class StoneStorageLogUI : MonoBehaviour
     List<GameObject> list;
 
     [SerializeField] Sprite LimestoneSprite;
-    string[] StoneNameString = {"Limestone", ".", ".", ".", ".", "." };
 
     bool canCloseUI;
 
@@ -83,7 +82,8 @@ public class StoneStorageLogUI : MonoBehaviour
             list.Add(L);
 
             Text t = L.GetComponentInChildren<Text>();
-            string temp = StoneNameString[i] + " * " + Stones[i].ToString();
+            
+            string temp = NameStrData.Instance.GetStoneName(i) + " * " + Stones[i].ToString();
             t.text = temp;
         }
     }

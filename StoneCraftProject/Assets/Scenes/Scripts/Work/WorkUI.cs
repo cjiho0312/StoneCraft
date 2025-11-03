@@ -7,6 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 public class WorkUI : MonoBehaviour
 {
+    public static WorkUI Instance;
     // 마우스 휠 스크롤, 선택 가능. 각각 하나씩만 선택 가능하게.
 
     // 돌 : StoneStorageManager에서 리스트 불러오기. 배열을 List로 옮기고 정렬 후 디스플레이.
@@ -26,21 +27,27 @@ public class WorkUI : MonoBehaviour
     [SerializeField] UnityEngine.UI.Text SelectedSculptureText;
     [SerializeField] UnityEngine.UI.Text SelectedToolText;
 
-    
+    int SelectedStoneID;
     List<GameObject> tempList; // Instantiate 오브젝트 삭제용 임시 리스트
-
-
-    string[] StoneNameString = { "Limestone", ".", ".", ".", ".", "." };
-    string[] ToolGradeString = { "Wood", "Stone", "Iron", "Diamond" };
 
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         WorkCanvas = GetComponent<Canvas>();
         WorkCanvas.enabled = false;
         tempList = new List<GameObject>();
+        SelectedStoneID = -1;
     }
 
+    private void Start()
+    {
+        StoneEmptyText.enabled = true;
+        SculptureEmptyText.enabled = true;
+    }
 
     public void OpenWorkUI()
     {
@@ -63,8 +70,9 @@ public class WorkUI : MonoBehaviour
 
     public void SelectStone(int index)
     {
-        // tempList[index]
-        // 버튼 스크립트에서 본인의 인덱스와 stoneID 가져오기
+        Debug.Log("SelectStone index : " + index);
+        SelectedStoneText.text = NameStrData.Instance.GetStoneName(index);
+        SelectedStoneID = index + 101;
     }
 
 
@@ -82,20 +90,27 @@ public class WorkUI : MonoBehaviour
         int[] array = StoneStorageManager.Instance.GetStonesArrayfromStorage();
 
         // 추후 조각품 tree에서도 받아오기
-        // 현재 가지고 있는 도구 등급도 받아오기
 
         Debug.Log("도구 grade : " + PlayerManager.Instance.currentItem.grade);
-
-        
-
 
         DisplayData(array, toolGrade);
     }
 
     
-    private void DisplayData(int[] tempArray, int toolGrade) // 보유한 돌 목록, 보유한 조각품, 도구 등급 받아서 Display
+    private void DisplayData(int[] tempArray, int toolGrade)
     {
-        if (tempArray.Length != 0) // 돌 목록 비어있지 않으면
+        bool isEmpty = true;
+
+        for (int i = 0; i < tempArray.Length; i++)
+        {
+            if (tempArray[i] != 0)
+            {
+                isEmpty = false;
+                break;
+            }
+        }
+
+        if (!isEmpty) // 돌 목록 비어있지 않으면
         {
             StoneEmptyText.enabled = false;
             StoneListArea.SetActive(true);
@@ -104,17 +119,21 @@ public class WorkUI : MonoBehaviour
             {
                 if (tempArray[i] == 0) { continue; }
 
-                GameObject L = Instantiate(OriginStoneList);
-                L.SetActive(true);
-                L.transform.SetParent(OriginStoneList.GetComponentInParent<Transform>(), false);
+                GameObject L = Instantiate(OriginStoneList); // 버튼 생성
+                L.transform.SetParent(StoneListArea.transform, false);
 
-                tempList.Add(L);
+                Button btn = L.GetComponent<Button>();
+                StoneSelectButton b = L.GetComponent<StoneSelectButton>();
+                b.SaveStoneIndex(i);
 
-                // 버튼 스크립트 만들어서 본인의 리스트 인덱스와 stoneID를 들고 있게끔 하기
-
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(() => b.OnClick());
                 UnityEngine.UI.Text t = L.GetComponentInChildren<UnityEngine.UI.Text>();
 
-                string tempStr = StoneNameString[i] + " * " + tempArray[i].ToString();
+                L.SetActive(true);
+                tempList.Add(L);
+
+                string tempStr = NameStrData.Instance.GetStoneName(i) + " * " + tempArray[i].ToString();
                 t.text = tempStr;
             }
         }
@@ -125,7 +144,7 @@ public class WorkUI : MonoBehaviour
         }
 
 
-        SelectedToolText.text = ToolGradeString[toolGrade] + " Tool";
+        SelectedToolText.text = NameStrData.Instance.GetToolGrade(toolGrade) + " Tool";
     }
 
 
@@ -140,6 +159,10 @@ public class WorkUI : MonoBehaviour
         }
 
         tempList.Clear();
-        
+
+        SelectedStoneText.text = "";
+        SelectedSculptureText.text = "";
+        SelectedToolText.text = "";
+        SelectedStoneID = -1;
     }
 }
