@@ -28,6 +28,7 @@ public class WorkUI : MonoBehaviour
     [SerializeField] UnityEngine.UI.Text SelectedToolText;
 
     int SelectedStoneID;
+    int SelectedSculptureID;
     List<GameObject> tempList; // Instantiate 오브젝트 삭제용 임시 리스트
 
 
@@ -41,6 +42,7 @@ public class WorkUI : MonoBehaviour
         WorkCanvas.enabled = false;
         tempList = new List<GameObject>();
         SelectedStoneID = -1;
+        SelectedSculptureID = -1;
     }
 
     private void Start()
@@ -70,28 +72,42 @@ public class WorkUI : MonoBehaviour
 
     public void SelectStone(int index)
     {
-        Debug.Log("SelectStone index : " + index);
         SelectedStoneText.text = NameStrData.Instance.GetStoneName(index);
         SelectedStoneID = index + 101;
     }
 
-
-
     public void SelectSculpture(int index)
     {
+        SelectedSculptureText.text = "Duck"; ///// 임시
+        SelectedSculptureID = index;         ///// 임시
+    }
 
+    public void StartSculpture()
+    {
+        if (SelectedStoneID == -1)
+        {
+            Debug.Log("돌을 골라주세요");
+            return;
+        }
+        if (SelectedSculptureID == -1)
+        {
+            Debug.Log("조각품을 골라주세요");
+            return;
+        }
+
+        // 조각 실행
+        Debug.Log("조각 시작");
     }
 
 
     private void LoadData()
     {
-        int toolGrade = 0;
+        if (PlayerManager.Instance.currentItem.itemtype != ItemType.Tool) return;
+        int toolGrade = PlayerManager.Instance.currentItem.grade;
 
         int[] array = StoneStorageManager.Instance.GetStonesArrayfromStorage();
 
         // 추후 조각품 tree에서도 받아오기
-
-        Debug.Log("도구 grade : " + PlayerManager.Instance.currentItem.grade);
 
         DisplayData(array, toolGrade);
     }
@@ -99,18 +115,18 @@ public class WorkUI : MonoBehaviour
     
     private void DisplayData(int[] tempArray, int toolGrade)
     {
-        bool isEmpty = true;
+        bool isStoneEmpty = true;
 
         for (int i = 0; i < tempArray.Length; i++)
         {
             if (tempArray[i] != 0)
             {
-                isEmpty = false;
+                isStoneEmpty = false;
                 break;
             }
         }
 
-        if (!isEmpty) // 돌 목록 비어있지 않으면
+        if (!isStoneEmpty) // 돌 목록 비어있지 않으면
         {
             StoneEmptyText.enabled = false;
             StoneListArea.SetActive(true);
@@ -142,6 +158,10 @@ public class WorkUI : MonoBehaviour
             StoneEmptyText.enabled = true;
             StoneListArea.SetActive(false);
         }
+
+
+        /////// 조각품 목록 불러오기
+        SculptureEmptyText.enabled = false; ///임시
 
 
         SelectedToolText.text = NameStrData.Instance.GetToolGrade(toolGrade) + " Tool";
