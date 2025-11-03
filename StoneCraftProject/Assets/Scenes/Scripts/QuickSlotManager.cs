@@ -20,6 +20,8 @@ public class QuickSlotManager : MonoBehaviour
 
     private void Start()
     {
+        selectionHighlight.enabled = true;
+        Canvas.ForceUpdateCanvases();
         UpdateSelectionUI();
         UpdatePlayerHand();
     }
@@ -36,7 +38,7 @@ public class QuickSlotManager : MonoBehaviour
         }
 
         // 마우스 스크롤로 선택
-        float scroll = Input.mouseScrollDelta.y;
+        float scroll = -Input.mouseScrollDelta.y;
         if (scroll != 0)
         {
             if (scroll > 0) selectedIndex = (selectedIndex + 1) % quickSlots.Length;
