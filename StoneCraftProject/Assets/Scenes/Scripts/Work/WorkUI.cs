@@ -102,6 +102,10 @@ public class WorkUI : MonoBehaviour
         }
 
         // 조각 실행
+        // WorkManager에게 카메라 이동 및 UI 출력 시키기
+        // 인벤토리 꽉 차있으면 로그 띄우고 Return 시키기
+        // 돌 창고에서 돌 빼기
+
         Debug.Log("조각 시작");
     }
 
