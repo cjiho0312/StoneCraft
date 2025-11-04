@@ -21,11 +21,13 @@ public class PlayerManager : MonoBehaviour
     PlayerMoveController playerMoveController;
     PlayerInteract playerInteract;
     Animator playerAnimator;
+    public Animator ToolsAnimator;
 
     public int money = 0;
 
     public Item currentItem;
-    public Transform handTransform;
+    public Transform handTransformForThirdP; // 3인칭용 손 위치
+    public Transform handTransformForMe; // 1인칭용 손 위치
 
     private GameObject currentHandObject; // 손에 실제로 생성된 오브젝트
 
@@ -62,12 +64,31 @@ public class PlayerManager : MonoBehaviour
 
         if (currentItem != null && currentItem.holdingPrefab != null)
         {
-            // Prefab 생성
-            currentHandObject = Instantiate(currentItem.holdingPrefab, handTransform);
+
+            // 1인칭용 Prefab 생성
+            currentHandObject = Instantiate(currentItem.holdingPrefab, handTransformForMe);
             currentHandObject.transform.localPosition = Vector3.zero;
             currentHandObject.transform.localRotation = Quaternion.identity;
             currentHandObject.transform.localScale = Vector3.one;
+
+            if (currentItem.itemtype == ItemType.Pickaxe || currentItem.itemtype == ItemType.Tool)
+                ToolsAnimator = currentHandObject.GetComponent<Animator>();
+
+            // // 멀티플레이어용 Prefab 생성
+            // currentHandObject = Instantiate(currentItem.holdingPrefab, handTransformForThirdP);
+            // currentHandObject.transform.localPosition = Vector3.zero;
+            // currentHandObject.transform.localRotation = Quaternion.identity;
+            // currentHandObject.transform.localScale = Vector3.one;
         }
+    }
+
+    private void ToolsAni(string Ani, bool isActive)
+    {
+        if (currentItem  == null) return;
+        if (currentItem.itemtype != ItemType.Pickaxe && currentItem.itemtype != ItemType.Tool) { return; }
+
+        ToolsAnimator.SetBool(Ani, isActive);
+
     }
 
     public bool SpendMoney(int amount)
@@ -92,6 +113,7 @@ public class PlayerManager : MonoBehaviour
                     playerInteract.enabled = true;
                     playerMoveController.isCanMove = true;
                     playerAnimator.SetBool("Mining", false);
+                    ToolsAni("Acting", false);
                     currentState = PlayerState.IDLE;
                     playerAnimator.SetInteger("PosMoveState", 0);
                     break;
@@ -123,6 +145,7 @@ public class PlayerManager : MonoBehaviour
                     playerInteract.enabled = false;
                     playerMoveController.isCanMove = false;
                     currentState = PlayerState.MINING;
+                    ToolsAni("Acting", true);
                     playerAnimator.SetBool("Mining", true);
                     break;
 
@@ -144,6 +167,7 @@ public class PlayerManager : MonoBehaviour
                     playerInteract.enabled = false;
                     playerMoveController.isCanMove = false;
                     playerAnimator.SetBool("Mining", false);
+                    ToolsAni("Acting", false);
                     currentState = PlayerState.NONE;
                     playerAnimator.SetInteger("PosMoveState", 0);
                     break;

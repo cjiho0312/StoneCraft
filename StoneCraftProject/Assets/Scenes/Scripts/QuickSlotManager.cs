@@ -75,6 +75,8 @@ public class QuickSlotManager : MonoBehaviour
     {
         if (quickSlotPanel != null)
             quickSlotPanel.SetActive(active);
+
+        selectionHighlight.gameObject.SetActive(active);
     }
 
     public Slot GetSelectedSlot()

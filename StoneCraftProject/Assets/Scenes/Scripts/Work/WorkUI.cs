@@ -54,6 +54,9 @@ public class WorkUI : MonoBehaviour
     public void OpenWorkUI()
     {
         PlayerInteract.Instance.SetCanInteract(false);
+
+        QuickSlotManager.Instance.SetActive(false);
+
         Pause.Instance.OnPause();
         WorkCanvas.enabled = true;
 
@@ -66,6 +69,9 @@ public class WorkUI : MonoBehaviour
         ClearData();
         Pause.Instance.OffPause();
         WorkCanvas.enabled = false;
+
+        QuickSlotManager.Instance.SetActive(true);
+
         PlayerInteract.Instance.SetCanInteract(true);
     }
 

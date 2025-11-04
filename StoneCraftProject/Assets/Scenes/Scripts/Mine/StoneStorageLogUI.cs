@@ -42,6 +42,8 @@ public class StoneStorageLogUI : MonoBehaviour
     {
         canCloseUI = false;
 
+        QuickSlotManager.Instance.SetActive(false);
+
         PlayerInteract.Instance.SetCanInteract(false);
         StoneStorageLogUpdate();
         Pause.Instance.OnPause();
@@ -60,6 +62,8 @@ public class StoneStorageLogUI : MonoBehaviour
         DestroyLog();
         Pause.Instance.OffPause();
         StoneStorageLogCanvas.enabled = false;
+
+        QuickSlotManager.Instance.SetActive(true);
 
         PlayerInteract.Instance.SetCanInteract(true);
     }
