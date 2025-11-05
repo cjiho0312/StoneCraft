@@ -29,6 +29,7 @@ public class WorkUI : MonoBehaviour
 
     int SelectedStoneID;
     int SelectedSculptureID;
+    int toolGrade;
     List<GameObject> tempList; // Instantiate 오브젝트 삭제용 임시 리스트
 
 
@@ -43,6 +44,7 @@ public class WorkUI : MonoBehaviour
         tempList = new List<GameObject>();
         SelectedStoneID = -1;
         SelectedSculptureID = -1;
+        toolGrade = -1;
     }
 
     private void Start()
@@ -53,13 +55,11 @@ public class WorkUI : MonoBehaviour
 
     public void OpenWorkUI()
     {
+        Pause.Instance.OnPause();
         PlayerInteract.Instance.SetCanInteract(false);
-
         QuickSlotManager.Instance.SetActive(false);
 
-        Pause.Instance.OnPause();
         WorkCanvas.enabled = true;
-
         LoadData();
     }
 
@@ -67,12 +67,11 @@ public class WorkUI : MonoBehaviour
     public void CloseWorkUI()
     {
         ClearData();
-        Pause.Instance.OffPause();
         WorkCanvas.enabled = false;
 
         QuickSlotManager.Instance.SetActive(true);
-
         PlayerInteract.Instance.SetCanInteract(true);
+        Pause.Instance.OffPause();
     }
 
 
@@ -88,32 +87,12 @@ public class WorkUI : MonoBehaviour
         SelectedSculptureID = index;         ///// 임시
     }
 
-    public void StartSculpture()
-    {
-        if (SelectedStoneID == -1)
-        {
-            Debug.Log("돌을 골라주세요");
-            return;
-        }
-        if (SelectedSculptureID == -1)
-        {
-            Debug.Log("조각품을 골라주세요");
-            return;
-        }
-
-        // 조각 실행
-        // WorkManager에게 카메라 이동 및 UI 출력 시키기
-        // 인벤토리 꽉 차있으면 로그 띄우고 Return 시키기
-        // 돌 창고에서 돌 빼기
-
-        Debug.Log("조각 시작");
-    }
 
 
     private void LoadData()
     {
         if (PlayerManager.Instance.currentItem.itemtype != ItemType.Tool) return;
-        int toolGrade = PlayerManager.Instance.currentItem.grade;
+        toolGrade = PlayerManager.Instance.currentItem.grade;
 
         int[] array = StoneStorageManager.Instance.GetStonesArrayfromStorage();
 
@@ -122,7 +101,6 @@ public class WorkUI : MonoBehaviour
         DisplayData(array, toolGrade);
     }
 
-    
     private void DisplayData(int[] tempArray, int toolGrade)
     {
         bool isStoneEmpty = true;
@@ -177,7 +155,6 @@ public class WorkUI : MonoBehaviour
         SelectedToolText.text = NameStrData.Instance.GetToolGrade(toolGrade) + " Tool";
     }
 
-
     private void ClearData()
     {
         foreach (GameObject L in tempList)
@@ -194,5 +171,29 @@ public class WorkUI : MonoBehaviour
         SelectedSculptureText.text = "";
         SelectedToolText.text = "";
         SelectedStoneID = -1;
+        toolGrade = -1;
+    }
+
+
+    public void StartSculpture() // Start 버튼 누르면 실행
+    {
+        if (SelectedStoneID == -1)
+        {
+            Debug.Log("돌을 골라주세요");
+            return;
+        }
+        else if (SelectedSculptureID == -1)
+        {
+            Debug.Log("조각품을 골라주세요");
+            return;
+        }
+        else if (Inventory.Instance.CanAddItem() == false)
+        {
+            Debug.Log("인벤토리가 가득 찼습니다!");
+            return;
+        }
+
+        // 조각 실행
+        WorkManager.Instance.StartSculpting(SelectedStoneID, SelectedSculptureID, toolGrade);
     }
 }

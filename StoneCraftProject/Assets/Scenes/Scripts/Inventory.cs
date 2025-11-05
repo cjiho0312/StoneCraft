@@ -33,6 +33,19 @@ public class Inventory : MonoBehaviour
         
     }
 
+    public bool CanAddItem()
+    {
+        foreach (var slot in slotList)
+        {
+            if (slot.item == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public int AddItem(Item originalItem) // Add 후 남은 양을 반환함.
     {
         if (originalItem == null) return 0;

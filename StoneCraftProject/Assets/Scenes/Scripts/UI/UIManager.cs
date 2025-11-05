@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Canvas QuickSlotCanvas;
     [SerializeField] Canvas WorkCanvas;
     [SerializeField] Canvas StoneStorageLogCanvas;
+    [SerializeField] Canvas SculptingCanvas;
 
     PauseUI pauseUI;
     InventoryUI inventoryUI;
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
         QuickSlotCanvas.gameObject.SetActive(true);
         WorkCanvas.gameObject.SetActive(true);
         StoneStorageLogCanvas.gameObject.SetActive(true);
+        SculptingCanvas.gameObject.SetActive(true);
 
         pauseUI = PauseCanvas.GetComponent<PauseUI>();
         inventoryUI = InventoryCanvas.GetComponent<InventoryUI>();
@@ -63,7 +65,11 @@ public class UIManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
             // 다른 창 열려있으면 먼저 닫기
-            if (InventoryCanvas.enabled)
+            if (SculptingCanvas.enabled)
+            {
+                WorkManager.Instance.StopSculpting();
+            }
+            else if (InventoryCanvas.enabled)
             {
                 inventoryUI.CloseInvenUI();
             }

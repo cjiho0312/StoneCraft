@@ -85,6 +85,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void CanSeeHoldingTool(bool Active)
+    {
+        if (currentHandObject == null) return;
+
+        MeshRenderer ToolRenderer = currentHandObject.gameObject.GetComponentInChildren<MeshRenderer>();
+        ToolRenderer.enabled = Active;
+    }
+
     void UpdateToolAnimation()
     {
         if (currentState == PlayerState.WALKING)

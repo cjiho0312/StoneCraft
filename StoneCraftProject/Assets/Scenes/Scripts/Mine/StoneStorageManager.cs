@@ -27,6 +27,11 @@ public class StoneStorageManager : MonoBehaviour
         stoneStorage.AddStones(list);
     }
 
+    public void RemoveStoneInStorage(int StoneID)
+    {
+        stoneStorage.RemoveStone(StoneID);
+    }
+
     public int [] GetStonesArrayfromStorage()
     {
         return stoneStorage.GetStonesArray();
