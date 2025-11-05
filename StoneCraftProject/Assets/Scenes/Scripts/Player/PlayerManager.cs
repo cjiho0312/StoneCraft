@@ -70,7 +70,7 @@ public class PlayerManager : MonoBehaviour
             currentHandObject = Instantiate(currentItem.holdingPrefab, handTransformForMe);
             currentHandObject.transform.localPosition = Vector3.zero;
             currentHandObject.transform.localRotation = Quaternion.identity;
-            currentHandObject.transform.localScale = Vector3.one;
+            currentHandObject.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
 
             if (currentItem.itemtype == ItemType.Pickaxe || currentItem.itemtype == ItemType.Tool)
                 ToolsAnimator = currentHandObject.GetComponent<Animator>();

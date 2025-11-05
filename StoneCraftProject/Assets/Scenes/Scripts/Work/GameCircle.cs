@@ -1,13 +1,15 @@
+using System.Drawing;
 using UnityEngine;
 
 public class GameCircle : MonoBehaviour
 {
-    public float minScale = 0.3f;
-    public float maxScale = 4f;
+    public float minSize = 30f;
+    public float maxSize = 300f;
     public float cycleTime = 1f; // 1√  ¡÷±‚
 
     private RectTransform rect;
     private float startTime;
+    public bool isStop;
 
     private void Awake()
     {
@@ -17,22 +19,28 @@ public class GameCircle : MonoBehaviour
     {
         startTime = Time.unscaledTime;
         SetCurrentScaleMax();
+        isStop = false;
     }
 
     void Update()
     {
+        if (isStop)
+        {
+            return;
+        }
+
         float t = Mathf.PingPong((Time.unscaledTime - startTime) / (cycleTime / 2f), 1f);
-        float scale = Mathf.Lerp(maxScale, minScale, t);
-        rect.localScale = new Vector3(scale, scale, 1f);
+        float size = Mathf.Lerp(maxSize, minSize, t);
+        rect.sizeDelta = new Vector2(size, size);
     }
 
-    public float GetCurrentScale()
+    public float GetCurrentSize()
     {
-        return rect.localScale.x;
+        return rect.sizeDelta.x;
     }
 
     public void SetCurrentScaleMax()
     {
-        rect.localScale = new Vector3(maxScale, maxScale, 1f);
+        rect.sizeDelta = new Vector2(maxSize, maxSize);
     }
 }

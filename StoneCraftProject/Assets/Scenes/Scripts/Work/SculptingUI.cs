@@ -17,24 +17,12 @@ public class SculptingUI : MonoBehaviour
     Canvas SculptingUICanvas;
     [SerializeField] SculptingGame game;
 
-    int stoneID;
-    int sculptureID;
-    int toolGrade;
-
-    int value; // 총 가치(가격)
-    int stoneValue;
-    int sculptureValue;
-    int sculptureSkill;
-    int SuccessRate;
-    int decoValue;
-
-    int currentStep; // 1~5단계 (돌 - 큰 덩어리 떼어낸 돌 - 어느정도 윤곽 생긴 돌 - 형태 잡힌 돌 - 마감처리 완료한 돌)
-
-    GameObject t;
+    GameObject t; // 임시
     [SerializeField] Light SculptureSpotLight;
     [SerializeField] Transform SculptureArea;
     [SerializeField] Transform ToolArea;
     [SerializeField] Item tool;
+    Animator ToolAnimator;
     Slider ProgressBar;
 
     private void Awake()
@@ -54,20 +42,26 @@ public class SculptingUI : MonoBehaviour
     {
         InitData();
 
-        stoneID = StoneID;
-        sculptureID = SculptureID;
-        this.toolGrade = toolGrade;
-
         // tool grade에 알맞은 도구를 인스턴스화해서 ToolArea에 넣어야 함.
         // 이건 프로토타입용 임시 코드
         t = Instantiate(tool.holdingPrefab);
         t.transform.parent = ToolArea;
-        //
+        t.tag = "UIAnim";
+        ToolAnimator = t.GetComponent<Animator>();
+        //---
 
         AimSwitch.Instance.EmptyAim(true);
         SculptureSpotLight.enabled = true;
         SculptingUICanvas.enabled = true;
         game.gameObject.SetActive(true);
+
+        game.GetData(StoneID, SculptureID, toolGrade);
+    }
+
+
+    public void PlayToolCarvingAnim()
+    {
+        ToolAnimator.SetTrigger("Carving");
     }
 
     public void CloseSculptingUI()
@@ -80,30 +74,19 @@ public class SculptingUI : MonoBehaviour
         SculptingUICanvas.enabled = false;
     }
 
-    public void UpdateProgressBar()
+    public void UpdateProgressBar(int currentStep)
     {
         ProgressBar.value = currentStep;
     }
 
     private void InitData()
     {
-        stoneID = -1;
-        sculptureID = -1;
-        toolGrade = -1;
-
-        value = 0;
-        stoneValue = 0;
-        sculptureValue = 0;
-        sculptureSkill = 0;
-        SuccessRate = 0;
-        decoValue = 0;
-
-        currentStep = 0;
         ProgressBar.value = 0;
 
         if (t != null)
         {
             t.transform.SetParent(null);
+            ToolAnimator = null;
             Destroy(t);
             t = null;
         }
