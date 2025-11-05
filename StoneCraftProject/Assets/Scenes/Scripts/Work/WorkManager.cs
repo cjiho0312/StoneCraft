@@ -37,4 +37,9 @@ public class WorkManager : MonoBehaviour
         Pause.Instance.OffPause();
     }
 
+    public void UpdateSculptingUI()
+    {
+        sculptingUI.UpdateProgressBar();
+    }
+
 }

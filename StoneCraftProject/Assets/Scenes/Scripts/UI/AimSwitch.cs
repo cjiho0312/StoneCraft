@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public enum AimState
 {
@@ -15,6 +17,7 @@ public class AimSwitch : MonoBehaviour
     public static AimSwitch Instance;
 
     [Header("Aim UI Objects")]
+    public GameObject Aim;
     public GameObject aimNone;
     public GameObject aimMine;
     public GameObject aimSculpt;
@@ -54,5 +57,11 @@ public class AimSwitch : MonoBehaviour
             aimDictionary[newState].SetActive(true);
 
         currentAimState = newState;
+    }
+
+    public void EmptyAim(bool Active)
+    {
+        ChangeAim(AimState.NONE);
+        Aim.SetActive(!Active);
     }
 }

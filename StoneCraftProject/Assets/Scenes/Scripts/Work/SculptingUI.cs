@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 public class SculptingUI : MonoBehaviour
@@ -14,6 +15,7 @@ public class SculptingUI : MonoBehaviour
     // 5. 인벤토리에 들어옴
 
     Canvas SculptingUICanvas;
+    [SerializeField] SculptingGame game;
 
     int stoneID;
     int sculptureID;
@@ -26,22 +28,26 @@ public class SculptingUI : MonoBehaviour
     int SuccessRate;
     int decoValue;
 
-    int steps; // 0~4단계
+    int currentStep; // 1~5단계 (돌 - 큰 덩어리 떼어낸 돌 - 어느정도 윤곽 생긴 돌 - 형태 잡힌 돌 - 마감처리 완료한 돌)
 
     GameObject t;
+    [SerializeField] Light SculptureSpotLight;
+    [SerializeField] Transform SculptureArea;
     [SerializeField] Transform ToolArea;
     [SerializeField] Item tool;
-    Slider StepSlider;
+    Slider ProgressBar;
 
     private void Awake()
     {
         SculptingUICanvas = GetComponent<Canvas>();
-        StepSlider = GetComponentInChildren<Slider>();
+        ProgressBar = GetComponentInChildren<Slider>();
     }
 
     private void Start()
     {
+        game.gameObject.SetActive(false);
         SculptingUICanvas.enabled = false;
+        SculptureSpotLight.enabled = false;
     }
 
     public void OpenSculptingUI(int StoneID, int SculptureID, int toolGrade)
@@ -58,16 +64,25 @@ public class SculptingUI : MonoBehaviour
         t.transform.parent = ToolArea;
         //
 
+        AimSwitch.Instance.EmptyAim(true);
+        SculptureSpotLight.enabled = true;
         SculptingUICanvas.enabled = true;
+        game.gameObject.SetActive(true);
     }
-
-  
-
 
     public void CloseSculptingUI()
     {
+        game.gameObject.SetActive(false);
         InitData();
+        AimSwitch.Instance.EmptyAim(false);
+
+        SculptureSpotLight.enabled = false;
         SculptingUICanvas.enabled = false;
+    }
+
+    public void UpdateProgressBar()
+    {
+        ProgressBar.value = currentStep;
     }
 
     private void InitData()
@@ -83,8 +98,8 @@ public class SculptingUI : MonoBehaviour
         SuccessRate = 0;
         decoValue = 0;
 
-        steps = 0;
-        StepSlider.value = 0;
+        currentStep = 0;
+        ProgressBar.value = 0;
 
         if (t != null)
         {
