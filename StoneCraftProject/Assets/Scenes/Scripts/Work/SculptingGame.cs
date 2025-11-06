@@ -15,6 +15,7 @@ public class SculptingGame : MonoBehaviour
     // 일정한 기준보다 차이가 크면 점수 깎고, 비슷하게 만들었으면 높은 점수 부여.
 
     [SerializeField] SculptingUI sculptingUI;
+    [SerializeField] SculptingStoneDisplay stoneDisplay;
 
     public GameCircle gameCircle;
     public GameObject checkCircle;
@@ -24,6 +25,7 @@ public class SculptingGame : MonoBehaviour
 
     private bool isClicking = false;
     private bool CanClick = true;
+    private bool EndSculpting = false;
 
     private Coroutine currentCoroutine;
 
@@ -34,12 +36,12 @@ public class SculptingGame : MonoBehaviour
     int value; // 총 가치(가격)
     int stoneValue; // 돌 가치 (기본 가격)
     int sculptureValue; // 조각품 가치 (기본 가격)
-    int sculptureSkill; // 조각품 숙련도
-    int SuccessRate; // 성공률 (완성도)
-    int decoValue; // 장식
+    int SuccessRate; // 성공률 (완성도) 10에서부터 시작
+    // int sculptureSkill; // 조각품 숙련도
+    // int decoValue; // 장식
 
-    int currentStep; // 1~5단계 (돌 - 큰 덩어리 떼어낸 돌 - 어느정도 윤곽 생긴 돌 - 형태 잡힌 돌 - 마감처리 완료한 돌)
-
+    int currentStep; // 0~3(4)단계 (돌 - 큰 덩어리 떼어낸 돌 - 어느정도 윤곽 생긴 돌 - 형태 잡힌 돌 - 마감처리 완료한 돌)
+    float StepForBar = 0.3333f; // 프로토타입 용
 
     public void GetData(int StoneID, int SculptureID, int toolGrade)
     {
@@ -48,11 +50,18 @@ public class SculptingGame : MonoBehaviour
         stoneID = StoneID;
         sculptureID = SculptureID;
         this.toolGrade = toolGrade;
+        
+        //프로토타입용
+        stoneValue = 5;
+        sculptureValue = 5;
+        //----
+
+        stoneDisplay.DisplaySculpture(currentStep);
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && CanClick)
+        if (Input.GetMouseButtonDown(0) && CanClick && !EndSculpting)
         {
             // 클릭 시 체크 원 생성
             checkCircle.SetActive(true);
@@ -95,8 +104,61 @@ public class SculptingGame : MonoBehaviour
     {
         sculptingUI.PlayToolCarvingAnim();
 
+        if (index == 0) // Bad
+        {
+            SuccessRate -= 5;
+        }
+        else if (index == 1) // Good
+        {
+            SuccessRate -= 1;
+        }
+        else if (index == 2) // Perfect
+        {
+
+        }
+
+        if (SuccessRate <= 0)
+        {
+            // 망가짐
+            Debug.Log("망가졌습니다!");
+            CanClick = false;
+            EndSculpting = true;
+
+            StartCoroutine(DisplayResult(0));
+        }
+
+        sculptingUI.UpdateProgressBar(StepForBar);
+        stoneDisplay.DisplaySculpture(++currentStep);
+
+        if (currentStep == 3)
+        {
+            // 점수 계산 및 완성
+            Debug.Log("완성했습니다!");
+            EndSculpting = true;
+
+            StopAllCoroutines();
+            resultText.text = ""; // 왜 안 사라지는 거지??
+            resultText.enabled = false;
+            currentCoroutine = null;
+            CanClick = false;
+            gameCircle.isStop = true;
+
+            calculateValue();
+            StartCoroutine(DisplayResult(1));
+        }
+
+    }
 
 
+    private void calculateValue()
+    {
+        //프로토타입용 가치 계산
+        value = (int)((stoneValue + sculptureValue) * (SuccessRate * 0.1f));
+    }
+
+    public void StopGame()
+    {
+        InitData();
     }
 
     private IEnumerator ShowResultCoroutine(float diff)
@@ -106,7 +168,7 @@ public class SculptingGame : MonoBehaviour
         if (diff < 0.03f)
         { 
             result = "Perfect!";
-            Result(0);
+            Result(2);
         }
         else if (diff < 0.1f)
         { 
@@ -115,8 +177,8 @@ public class SculptingGame : MonoBehaviour
         }
         else
         {
-            result = "Miss!";
-            Result(2);
+            result = "Bad!";
+            Result(0);
         }
 
         resultText.text = result;
@@ -138,7 +200,24 @@ public class SculptingGame : MonoBehaviour
         gameCircle.isStop = false;
     }
 
+    private IEnumerator DisplayResult(int index)
+    {
+        // 화면 보여주기
+        
+        if (index == 0)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            WorkManager.Instance.StopSculpting();
+        }
 
+        else if (index == 1)
+        {
+            sculptingUI.OpenResultUI();
+            stoneDisplay.RotateSculpture();
+            yield return new WaitForSecondsRealtime(3f);
+            WorkManager.Instance.StopSculpting();
+        }
+    }
 
     private void InitData()
     {
@@ -151,10 +230,14 @@ public class SculptingGame : MonoBehaviour
         value = 0;
         stoneValue = 0;
         sculptureValue = 0;
-        sculptureSkill = 0;
-        SuccessRate = 0;
-        decoValue = 0;
+        //sculptureSkill = 0;
+        SuccessRate = 10;
+        //decoValue = 0;
 
         currentStep = 0;
+        EndSculpting = false;
+        isClicking = false;
+        CanClick = true;
+        stoneDisplay.StopDisplay();
     }
 }

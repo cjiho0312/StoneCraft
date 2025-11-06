@@ -1,6 +1,8 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class SculptingUI : MonoBehaviour
 {
@@ -22,13 +24,15 @@ public class SculptingUI : MonoBehaviour
     [SerializeField] Transform SculptureArea;
     [SerializeField] Transform ToolArea;
     [SerializeField] Item tool;
+    [SerializeField] Slider ProgressBar;
+    [SerializeField] Text SuccessText;
     Animator ToolAnimator;
-    Slider ProgressBar;
+
+    int value;
 
     private void Awake()
     {
         SculptingUICanvas = GetComponent<Canvas>();
-        ProgressBar = GetComponentInChildren<Slider>();
     }
 
     private void Start()
@@ -36,10 +40,14 @@ public class SculptingUI : MonoBehaviour
         game.gameObject.SetActive(false);
         SculptingUICanvas.enabled = false;
         SculptureSpotLight.enabled = false;
+        ProgressBar.gameObject.SetActive(true);
+        SuccessText.gameObject.SetActive(false);
     }
 
     public void OpenSculptingUI(int StoneID, int SculptureID, int toolGrade)
     {
+
+
         InitData();
 
         // tool grade에 알맞은 도구를 인스턴스화해서 ToolArea에 넣어야 함.
@@ -48,6 +56,7 @@ public class SculptingUI : MonoBehaviour
         t.transform.parent = ToolArea;
         t.tag = "UIAnim";
         ToolAnimator = t.GetComponent<Animator>();
+        ToolAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
         //---
 
         AimSwitch.Instance.EmptyAim(true);
@@ -58,6 +67,12 @@ public class SculptingUI : MonoBehaviour
         game.GetData(StoneID, SculptureID, toolGrade);
     }
 
+    public void OpenResultUI()
+    {
+        ProgressBar.gameObject.SetActive(false);
+        SuccessText.gameObject.SetActive(true);
+    }
+
 
     public void PlayToolCarvingAnim()
     {
@@ -66,6 +81,7 @@ public class SculptingUI : MonoBehaviour
 
     public void CloseSculptingUI()
     {
+        game.StopGame();
         game.gameObject.SetActive(false);
         InitData();
         AimSwitch.Instance.EmptyAim(false);
@@ -74,13 +90,20 @@ public class SculptingUI : MonoBehaviour
         SculptingUICanvas.enabled = false;
     }
 
-    public void UpdateProgressBar(int currentStep)
+    public void UpdateProgressBar(float Step)
     {
-        ProgressBar.value = currentStep;
+        ProgressBar.value += Step;
     }
 
     private void InitData()
     {
+        game.gameObject.SetActive(false);
+        SculptingUICanvas.enabled = false;
+        SculptureSpotLight.enabled = false;
+        ProgressBar.gameObject.SetActive(true);
+        SuccessText.gameObject.SetActive(false);
+
+        value = 0;
         ProgressBar.value = 0;
 
         if (t != null)
