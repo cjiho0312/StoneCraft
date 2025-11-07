@@ -52,6 +52,7 @@ public class WorkManager : MonoBehaviour
         S.holdingPrefab = G;
         S.itemName = "Sculpture";
         S.value = value;
+        S.itemId = 999;
         
         Inventory.Instance.AddItem(S);
     }
