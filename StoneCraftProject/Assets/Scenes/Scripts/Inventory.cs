@@ -132,18 +132,17 @@ public class Inventory : MonoBehaviour
 
         int remaining = quantity;
 
-        for (int i = slots.Count - 1; i >= 0 && remaining > 0; i--)
+        var tempSlots = new List<Slot>(slots);
+
+        for (int i = tempSlots.Count - 1; i >= 0 && remaining > 0; i--)
         {
-            var slot = slots[i];
+            var slot = tempSlots[i];
             if (slot.item == null)
                 continue;
 
             int decrease = Mathf.Min(slot.item.quantity, remaining);
             slot.DecreaseQuantity(decrease);
             remaining -= decrease;
-
-            if (slot.item == null)
-                slots.RemoveAt(i);
         }
 
         // 딕셔너리에 남은 슬롯이 없으면 항목 제거
@@ -164,6 +163,7 @@ public class Inventory : MonoBehaviour
         if (!itemMap.ContainsKey(clearedItemId)) return;
 
         var slots = itemMap[clearedItemId];
+
         slots.Remove(clearedSlot);
 
         if (slots.Count == 0)

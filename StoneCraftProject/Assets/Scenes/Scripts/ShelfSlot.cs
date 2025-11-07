@@ -4,13 +4,14 @@ using static UnityEditor.Progress;
 
 public class ShelfSlot : MonoBehaviour, IInteractable
 {
-    GameObject Sculpture;
-    Collider col;
+    GameObject SculpturePrefab;
+    Item SculptureData;
+
 
 
     private void Awake()
     {
-        col = GetComponent<Collider>();
+
     }
 
 
@@ -21,20 +22,31 @@ public class ShelfSlot : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        if (PlayerManager.Instance.currentItem.itemtype == ItemType.Sculpture)
+        if (SculpturePrefab == null)
         {
-            if (Sculpture == null)
+            if (PlayerManager.Instance.currentItem == null)
+            {
+                return;
+            }
+            else if (PlayerManager.Instance.currentItem.itemtype == ItemType.Sculpture)
             {
                 DisplaySculptureOnSlot();
             }
             else
             {
-                GetSculpturefromSlot();
+                Debug.Log("조각품만 전시할 수 있습니다!");
             }
         }
         else
         {
-            Debug.Log("조각품만 전시할 수 있습니다!");
+            if (Inventory.Instance.CanAddItem())
+            {
+                GetSculpturefromSlot();
+            }
+            else
+            {
+                Debug.Log("인벤토리가 가득 찼습니다");
+            }
         }
 
     }
@@ -48,16 +60,35 @@ public class ShelfSlot : MonoBehaviour, IInteractable
     void DisplaySculptureOnSlot() // 슬롯에 조각품 전시
     {
         // 전시 후
+        GameObject prefab = PlayerManager.Instance.currentItem.holdingPrefab;
+        SculpturePrefab = Instantiate(prefab, transform);
+        SculpturePrefab.transform.localPosition = Vector3.zero;
+        SculpturePrefab.transform.localScale = new Vector3 (30f, 30f, 30f);
+        // SculpturePrefab.transform.localRotation = Quaternion.identity;
+
+
+        SculptureData = PlayerManager.Instance.currentItem;
 
         // 인벤토리에서 아이템 삭제
-        int itemid = PlayerManager.Instance.currentItem.itemId;
-        Inventory.Instance.RemoveItem(itemid, 1);
+        Inventory.Instance.RemoveItem(SculptureData.itemId, 1);
 
     }
 
     void GetSculpturefromSlot() // 슬롯에 있던 조각품 가져오기
     {
+        if (SculptureData == null)
+        {
+            Debug.LogWarning("SculptureData가 null입니다!");
+            return;
+        }
 
+        // 슬롯에서 안 가져와짐...
+        Inventory.Instance.AddItem(SculptureData);
+
+        Destroy(SculpturePrefab);
+        SculpturePrefab = null;
+
+        SculptureData = null;
     }
 
 }
