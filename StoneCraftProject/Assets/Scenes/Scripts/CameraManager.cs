@@ -13,6 +13,9 @@ public class CameraManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        MainCamera.gameObject.SetActive(true);
+        SculptingCamera.gameObject.SetActive(true);
     }
 
     void Start()

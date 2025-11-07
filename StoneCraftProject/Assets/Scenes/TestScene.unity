@@ -718,6 +718,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   workUI: {fileID: 676599070}
   sculptingUI: {fileID: 1708037888}
+  sculptingStoneDisplay: {fileID: 452634759}
+  SculptureItem: {fileID: 11400000, guid: c8f0fd150d8f7344695138d934cb44d2, type: 2}
 --- !u!1 &90477471
 GameObject:
   m_ObjectHideFlags: 0
@@ -5873,7 +5875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &724890615
 Transform:
   m_ObjectHideFlags: 0
@@ -8150,7 +8152,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Success!
+  m_Text: 
 --- !u!222 &931379326
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12011,7 +12013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1382462614
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14402,7 +14404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1708037884
 RectTransform:
   m_ObjectHideFlags: 0

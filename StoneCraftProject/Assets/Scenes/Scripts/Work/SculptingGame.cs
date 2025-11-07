@@ -27,7 +27,7 @@ public class SculptingGame : MonoBehaviour
     private bool CanClick = true;
     private bool EndSculpting = false;
 
-    private Coroutine currentCoroutine;
+    private Coroutine currentResultTextCoroutine;
 
     int stoneID;
     int sculptureID;
@@ -83,26 +83,76 @@ public class SculptingGame : MonoBehaviour
             float checkSize = checkCircle.GetComponent<RectTransform>().sizeDelta.x;
 
             float diff = Mathf.Abs(gameSize - checkSize) / (gameCircle.maxSize - gameCircle.minSize);
-            ShowResult(diff);
+
+            StartShowResult(diff);
 
             isClicking = false;
         }
     }
 
-    public void ShowResult(float diff)
+    public void StartShowResult(float diff) // 마우스 떼면 결과 출력 시작
     {
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-        }
-
-        currentCoroutine = StartCoroutine(ShowResultCoroutine(diff));
+        CheckDiffResult(diff);
         StartCoroutine(DisableCirclesAfterDelay());
     }
 
-    private void Result(int index)
+
+    private void CheckDiffResult(float diff) // 원 크기 비교 함수
+    {
+        if (currentResultTextCoroutine != null)
+        {
+            StopCoroutine(currentResultTextCoroutine);
+        }
+
+        string result;
+        int index = 0;
+
+        if (diff < 0.03f)
+        {
+            result = "Perfect!";
+            index = 2;
+        }
+        else if (diff < 0.1f)
+        {
+            result = "Good!";
+            index = 1;
+        }
+        else
+        {
+            result = "Bad!";
+        }
+
+        currentResultTextCoroutine = StartCoroutine(ShowResultCoroutine(result));
+        StartCoroutine(Result(index));
+    }
+
+
+    private IEnumerator ShowResultCoroutine(string ResultStr) // 결과 텍스트 출력
+    {
+        resultText.text = ResultStr;
+        resultText.enabled = true;
+
+        yield return new WaitForSecondsRealtime(1f);
+
+        resultText.text = "";
+        resultText.enabled = false;
+        currentResultTextCoroutine = null;
+    }
+
+    private IEnumerator DisableCirclesAfterDelay() // 망치질 후 게임 딜레이
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        checkCircle.SetActive(false);
+        gameCircle.gameObject.SetActive(false);
+        CanClick = true;
+        gameCircle.isStop = false;
+    }
+
+
+    private IEnumerator Result(int index) // 결과에 따라 정확도 수정, 완성 확인
     {
         sculptingUI.PlayToolCarvingAnim();
+
 
         if (index == 0) // Bad
         {
@@ -117,6 +167,8 @@ public class SculptingGame : MonoBehaviour
 
         }
 
+        yield return new WaitForSecondsRealtime(0.5f); // 애니메이션 기다려주기
+
         if (SuccessRate <= 0)
         {
             // 망가짐
@@ -124,7 +176,20 @@ public class SculptingGame : MonoBehaviour
             CanClick = false;
             EndSculpting = true;
 
-            StartCoroutine(DisplayResult(0));
+            if (currentResultTextCoroutine != null)
+            {
+                StopCoroutine(currentResultTextCoroutine);
+                currentResultTextCoroutine = null;
+            }
+
+            resultText.text = "";
+            resultText.enabled = false;
+
+            CanClick = false;
+
+            StartCoroutine(DisplayFinalResult(0));
+
+            yield break;
         }
 
         sculptingUI.UpdateProgressBar(StepForBar);
@@ -136,15 +201,23 @@ public class SculptingGame : MonoBehaviour
             Debug.Log("완성했습니다!");
             EndSculpting = true;
 
-            StopAllCoroutines();
-            resultText.text = ""; // 왜 안 사라지는 거지??
+            if (currentResultTextCoroutine != null)
+            {
+                StopCoroutine(currentResultTextCoroutine);
+                currentResultTextCoroutine = null;
+            }
+
+            resultText.text = "";
             resultText.enabled = false;
-            currentCoroutine = null;
+
             CanClick = false;
-            gameCircle.isStop = true;
 
             calculateValue();
-            StartCoroutine(DisplayResult(1));
+
+            // 인벤토리에 조각품 추가
+            WorkManager.Instance.GetSculpture("Sculpture", value);
+
+            StartCoroutine(DisplayFinalResult(1));
         }
 
     }
@@ -156,67 +229,29 @@ public class SculptingGame : MonoBehaviour
         value = (int)((stoneValue + sculptureValue) * (SuccessRate * 0.1f));
     }
 
-    public void StopGame()
-    {
-        InitData();
-    }
-
-    private IEnumerator ShowResultCoroutine(float diff)
-    {
-        string result;
-
-        if (diff < 0.03f)
-        { 
-            result = "Perfect!";
-            Result(2);
-        }
-        else if (diff < 0.1f)
-        { 
-            result = "Good!";
-            Result(1);
-        }
-        else
-        {
-            result = "Bad!";
-            Result(0);
-        }
-
-        resultText.text = result;
-        resultText.enabled = true;
-
-        yield return new WaitForSecondsRealtime(1f);
-
-        resultText.enabled = false;
-
-        currentCoroutine = null;
-    }
-
-    private IEnumerator DisableCirclesAfterDelay()
-    {
-        yield return new WaitForSecondsRealtime(0.5f);
-        checkCircle.SetActive(false);
-        gameCircle.gameObject.SetActive(false);
-        CanClick = true;
-        gameCircle.isStop = false;
-    }
-
-    private IEnumerator DisplayResult(int index)
+    private IEnumerator DisplayFinalResult(int index)
     {
         // 화면 보여주기
+        PlayerManager.Instance.CanSeeHoldingTool(false);
         
         if (index == 0)
         {
+            sculptingUI.OpenResultUI(0);
             yield return new WaitForSecondsRealtime(1f);
             WorkManager.Instance.StopSculpting();
         }
 
         else if (index == 1)
         {
-            sculptingUI.OpenResultUI();
+            sculptingUI.OpenResultUI(1);
             stoneDisplay.RotateSculpture();
-            yield return new WaitForSecondsRealtime(3f);
+            yield return new WaitForSecondsRealtime(4f);
             WorkManager.Instance.StopSculpting();
         }
+    }
+    public void StopGame()
+    {
+        InitData();
     }
 
     private void InitData()

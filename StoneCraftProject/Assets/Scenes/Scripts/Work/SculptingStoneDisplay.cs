@@ -79,6 +79,13 @@ public class SculptingStoneDisplay : MonoBehaviour
         isRotate = true;
     }
 
+    public GameObject GetSculpturePrefab()
+    {
+        // 프로토타입용
+
+        return S1003;
+    }
+
     private void Delete(GameObject g)
     {
         if (currentObject == null) return;
@@ -89,6 +96,7 @@ public class SculptingStoneDisplay : MonoBehaviour
     public void StopDisplay()
     {
         if (currentObject == null) return;
+
         Destroy(currentObject);
         currentObject = null;
         isRotate = false;

@@ -37,17 +37,13 @@ public class SculptingUI : MonoBehaviour
 
     private void Start()
     {
-        game.gameObject.SetActive(false);
-        SculptingUICanvas.enabled = false;
-        SculptureSpotLight.enabled = false;
-        ProgressBar.gameObject.SetActive(true);
+        InitData();
         SuccessText.gameObject.SetActive(false);
+        ProgressBar.gameObject.SetActive(false);
     }
 
     public void OpenSculptingUI(int StoneID, int SculptureID, int toolGrade)
     {
-
-
         InitData();
 
         // tool grade에 알맞은 도구를 인스턴스화해서 ToolArea에 넣어야 함.
@@ -67,10 +63,19 @@ public class SculptingUI : MonoBehaviour
         game.GetData(StoneID, SculptureID, toolGrade);
     }
 
-    public void OpenResultUI()
+    public void OpenResultUI(int index)
     {
+        if (index == 0)
+        {
+            SuccessText.text = "Failed...";
+        }
+        else if (index == 1)
+        {
+            SuccessText.text = "Success!";
+        }
+
+        SuccessText.enabled = true;
         ProgressBar.gameObject.SetActive(false);
-        SuccessText.gameObject.SetActive(true);
     }
 
 
@@ -81,6 +86,7 @@ public class SculptingUI : MonoBehaviour
 
     public void CloseSculptingUI()
     {
+        SuccessText.gameObject.SetActive(false);
         game.StopGame();
         game.gameObject.SetActive(false);
         InitData();
@@ -100,8 +106,10 @@ public class SculptingUI : MonoBehaviour
         game.gameObject.SetActive(false);
         SculptingUICanvas.enabled = false;
         SculptureSpotLight.enabled = false;
+        SuccessText.gameObject.SetActive(true);
         ProgressBar.gameObject.SetActive(true);
-        SuccessText.gameObject.SetActive(false);
+        SuccessText.text = "";
+        SuccessText.enabled = false;
 
         value = 0;
         ProgressBar.value = 0;

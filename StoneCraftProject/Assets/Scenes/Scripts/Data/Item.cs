@@ -16,6 +16,7 @@ public class Item : ScriptableObject
     public string itemName; // 이름
     public ItemType itemtype; // 타입
     public Sprite itemImage; // 스프라이트
+    public int value;        // 가치
     public int grade;          // 도구 등급, 조각품 품질 등
     public int quantity = 1;   // 기본값 1 (도구는 1로 고정)
 
