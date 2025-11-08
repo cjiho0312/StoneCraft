@@ -64,13 +64,11 @@ public class ShelfSlot : MonoBehaviour, IInteractable
         SculpturePrefab = Instantiate(prefab, transform);
         SculpturePrefab.transform.localPosition = Vector3.zero;
         SculpturePrefab.transform.localScale = new Vector3 (30f, 30f, 30f);
-        // SculpturePrefab.transform.localRotation = Quaternion.identity;
-
 
         SculptureData = PlayerManager.Instance.currentItem;
 
         // 인벤토리에서 아이템 삭제
-        Inventory.Instance.RemoveItem(SculptureData.itemId, 1);
+        Inventory.Instance.RemoveSculptureItem(SculptureData.itemId);
 
     }
 
@@ -82,8 +80,7 @@ public class ShelfSlot : MonoBehaviour, IInteractable
             return;
         }
 
-        // 슬롯에서 안 가져와짐...
-        Inventory.Instance.AddItem(SculptureData);
+        Inventory.Instance.AddSculptureItem(SculptureData);
 
         Destroy(SculpturePrefab);
         SculpturePrefab = null;

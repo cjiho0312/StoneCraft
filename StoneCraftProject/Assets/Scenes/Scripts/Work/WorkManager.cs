@@ -9,6 +9,7 @@ public class WorkManager : MonoBehaviour
     [SerializeField] SculptingStoneDisplay sculptingStoneDisplay;
 
     [SerializeField] Item SculptureItem;
+    int nextSculptureID;
 
     private void Awake()
     {
@@ -16,6 +17,7 @@ public class WorkManager : MonoBehaviour
         {
             Instance = this;
         }
+        nextSculptureID = 1000;
     }
 
     public void StartWork()
@@ -52,7 +54,7 @@ public class WorkManager : MonoBehaviour
         S.holdingPrefab = G;
         S.itemName = "Sculpture";
         S.value = value;
-        S.itemId = 999;
+        S.itemId = nextSculptureID++;
         
         Inventory.Instance.AddItem(S);
     }

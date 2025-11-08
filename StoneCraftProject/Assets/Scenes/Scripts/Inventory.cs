@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class Inventory : MonoBehaviour
 {
@@ -45,6 +46,8 @@ public class Inventory : MonoBehaviour
 
         return false;
     }
+
+ 
 
     public int AddItem(Item originalItem) // Add 후 남은 양을 반환함.
     {
@@ -105,6 +108,71 @@ public class Inventory : MonoBehaviour
         QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();
 
         return remaining;
+    }
+
+
+    public void AddSculptureItem(Item SItem)
+    {
+        if (!CanAddItem()) return;
+        if (SItem == null)
+        {
+            Debug.Log("조각 아이템이 없습니다!");
+            return;
+        }
+
+        bool FindSlot = false;
+
+        foreach (var slot in slotList)
+        {
+            if (FindSlot) break;
+
+            if (slot.item == null)
+            {
+                Item newItem = SItem;
+                slot.SetItem(newItem);
+
+                // 딕셔너리에 등록
+                if (!itemMap.ContainsKey(newItem.itemId))
+                    itemMap[newItem.itemId] = new List<Slot>();
+                itemMap[newItem.itemId].Add(slot);
+
+                FindSlot = true;
+                Debug.Log("조각품 ID : " + SItem.itemId);
+                Debug.Log("인벤토리에 조각품 등록");
+            }
+        }
+
+        QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();
+    }
+    
+
+    public void RemoveSculptureItem(int itemID)
+    {
+        bool FindSlot = false;
+
+        if (!itemMap.TryGetValue(itemID, out var slots))
+        {
+            Debug.Log("해당 아이템이 없습니다!");
+            return;
+        }
+
+        foreach (var slot in slotList)
+        {
+            if (FindSlot) break;
+            if (slot.item == null) { continue; }
+
+            if (slot.item.itemId == itemID)
+            {
+                slot.DecreaseQuantity(1);
+                itemMap.Remove(itemID);
+                FindSlot = true;
+            }
+        }
+
+        QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();
+
+        Debug.Log("조각품 ID : " + itemID);
+        Debug.Log("인벤토리에서 조각품 삭제");
     }
 
 
