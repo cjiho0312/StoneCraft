@@ -8,6 +8,7 @@ public abstract class MineBase : MonoBehaviour, IInteractable
     public bool isBeingMined = false;
 
     [SerializeField] public MineManager mineManager;
+    
 
     public void OnFocus()
     {

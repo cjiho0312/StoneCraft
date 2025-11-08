@@ -3,14 +3,23 @@ using UnityEngine;
 public class LimestoneMine : MineBase
 {
     [SerializeField] Stone limestone;
+    [SerializeField] CartArea cartArea;
     public override Stone StoneType => limestone;
     public override float durability => 3;
 
     public override void OnInteract()
     {
-        if (PlayerManager.Instance.currentItem != null && PlayerManager.Instance.currentItem.itemtype == ItemType.Pickaxe)
+        if (PlayerManager.Instance.currentItem != null &&
+            PlayerManager.Instance.currentItem.itemtype == ItemType.Pickaxe)
         {
-            mineManager.StartMining(this);
+            if (cartArea.GetIsCartArea())
+            {
+                mineManager.StartMining(this);
+            }
+            else
+            {
+                Debug.Log("수레가 필요합니다!");
+            }
         }
         else
         {

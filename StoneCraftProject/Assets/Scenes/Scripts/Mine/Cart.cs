@@ -23,7 +23,11 @@ public class Cart : MonoBehaviour, IInteractable
     {
         if (isPulling)
         {
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                InitCartRot();
+            }
+            if (!Input.GetKey(KeyCode.E) && !Input.GetMouseButton(0))
             {
                 StopPullCart();
             }
@@ -42,8 +46,10 @@ public class Cart : MonoBehaviour, IInteractable
     {
         if (blockInteract || isPulling) { return; }
 
+        if (!Input.GetKey(KeyCode.E) && !Input.GetMouseButton(0))
+        { return; }
+
         Debug.Log("On Interact");
-        // 추후 퀵슬롯 수정해햐 함 (손에 아이템 못 들게)
         StartPullCart();
     }
 
@@ -58,7 +64,7 @@ public class Cart : MonoBehaviour, IInteractable
     void StartPullCart()
     {
         if (blockInteract) return;
-
+        PlayerManager.Instance.CanSeeHoldingTool(false);
         PlayerInteract.Instance.SetCanInteract(false);
 
         isPulling = true;
@@ -88,9 +94,17 @@ public class Cart : MonoBehaviour, IInteractable
         PlayerManager.Instance.ChangePlayerState(PlayerState.IDLE);
         StartCoroutine(BlockInteractShort());
 
+        PlayerManager.Instance.CanSeeHoldingTool(true);
         PlayerInteract.Instance.SetCanInteract(true);
 
         Debug.Log("수레 끌기 끝");
+    }
+
+    void InitCartRot() // 수레 세우기
+    {
+        StopPullCart();
+        gameObject.transform.rotation = Quaternion.identity;
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1, gameObject.transform.position.z);
     }
 
     IEnumerator BlockInteractShort()
