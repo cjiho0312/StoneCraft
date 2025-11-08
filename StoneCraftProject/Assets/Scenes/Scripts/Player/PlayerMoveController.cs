@@ -8,8 +8,8 @@ public class PlayerMoveController : MonoBehaviour
 
     [SerializeField] float walkSpeed = 5f;
     [SerializeField] float runSpeed = 8f;
-    [SerializeField] float mouseSpeedX = 4f;
-    [SerializeField] float mouseSpeedY = 4f;
+    [SerializeField] float mouseSpeedX = 2f;
+    [SerializeField] float mouseSpeedY = 2f;
     [SerializeField] float jump = 6f;
     [SerializeField] float gravity = 20f;
 
