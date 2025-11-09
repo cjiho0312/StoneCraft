@@ -17,6 +17,8 @@ public class SculptingGame : MonoBehaviour
     [SerializeField] SculptingUI sculptingUI;
     [SerializeField] SculptingStoneDisplay stoneDisplay;
 
+    [SerializeField] ParticleSystem SculptingEffect;
+
     public GameCircle gameCircle;
     public GameObject checkCircle;
 
@@ -42,6 +44,14 @@ public class SculptingGame : MonoBehaviour
 
     int currentStep; // 0~3(4)단계 (돌 - 큰 덩어리 떼어낸 돌 - 어느정도 윤곽 생긴 돌 - 형태 잡힌 돌 - 마감처리 완료한 돌)
     float StepForBar = 0.3333f; // 프로토타입 용
+
+    public void Start()
+    {
+        SculptingEffect.gameObject.SetActive(true);
+        SculptingEffect.Stop();
+        var p = SculptingEffect.main;
+        p.useUnscaledTime = true;
+    }
 
     public void GetData(int StoneID, int SculptureID, int toolGrade)
     {
@@ -84,8 +94,8 @@ public class SculptingGame : MonoBehaviour
 
             float diff = Mathf.Abs(gameSize - checkSize) / (gameCircle.maxSize - gameCircle.minSize);
 
+            
             StartShowResult(diff);
-
             isClicking = false;
         }
     }
@@ -167,7 +177,8 @@ public class SculptingGame : MonoBehaviour
 
         }
 
-        yield return new WaitForSecondsRealtime(0.5f); // 애니메이션 기다려주기
+        yield return new WaitForSecondsRealtime(0.3f); // 애니메이션 기다려주기
+        PlayEffect();
 
         if (SuccessRate <= 0)
         {
@@ -252,6 +263,11 @@ public class SculptingGame : MonoBehaviour
     public void StopGame()
     {
         InitData();
+    }
+
+    private void PlayEffect()
+    {
+        SculptingEffect.Play();
     }
 
     private void InitData()
