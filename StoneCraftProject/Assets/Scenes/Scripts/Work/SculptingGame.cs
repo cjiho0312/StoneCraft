@@ -18,6 +18,7 @@ public class SculptingGame : MonoBehaviour
     [SerializeField] SculptingStoneDisplay stoneDisplay;
 
     [SerializeField] ParticleSystem SculptingEffect;
+    [SerializeField] ParticleSystem SuccessEffect;
 
     public GameCircle gameCircle;
     public GameObject checkCircle;
@@ -48,9 +49,11 @@ public class SculptingGame : MonoBehaviour
     public void Start()
     {
         SculptingEffect.gameObject.SetActive(true);
-        SculptingEffect.Stop();
+        SuccessEffect.gameObject.SetActive(true);
         var p = SculptingEffect.main;
+        var s = SuccessEffect.main;
         p.useUnscaledTime = true;
+        s.useUnscaledTime = true;
     }
 
     public void GetData(int StoneID, int SculptureID, int toolGrade)
@@ -255,6 +258,7 @@ public class SculptingGame : MonoBehaviour
         {
             sculptingUI.OpenResultUI(1);
             stoneDisplay.RotateSculpture();
+            SuccessEffect.Play();
             yield return new WaitForSecondsRealtime(3f);
             WorkManager.Instance.GetSculpture("Sculpture", value);
             WorkManager.Instance.StopSculpting();

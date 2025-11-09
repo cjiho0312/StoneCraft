@@ -68,14 +68,14 @@ public class GameManager : MonoBehaviour
 
     // 긴급 저장 (예: 씬 전환, 종료 시)
 
-    private void OnApplicationQuit()
-    {
-        SaveGame();
-    }
+    // private void OnApplicationQuit()
+    // {
+    //     SaveGame();
+    // }
 
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
-            SaveGame();
-    }
+    // private void OnApplicationPause(bool pause)
+    // {
+    //     if (pause)
+    //         SaveGame();
+    // }
 }
