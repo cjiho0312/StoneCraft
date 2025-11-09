@@ -7,6 +7,7 @@ public class PlayerInteract : MonoBehaviour
 
     [SerializeField] float interactDistance = 3.2f;
     [SerializeField] LayerMask interactLayer;
+    public Vector3 interactPos;
 
     IInteractable nowFocus;
 
@@ -51,6 +52,7 @@ public class PlayerInteract : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
             {
+                interactPos = hit.point;
                 nowFocus.OnInteract();
             }
         }

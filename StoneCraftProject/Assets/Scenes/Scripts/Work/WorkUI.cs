@@ -83,7 +83,7 @@ public class WorkUI : MonoBehaviour
 
     public void SelectSculpture(int index)
     {
-        SelectedSculptureText.text = "Sculpture"; ///// 임시
+        SelectedSculptureText.text = "Egg"; ///// 임시
         SelectedSculptureID = index;         ///// 임시
     }
 

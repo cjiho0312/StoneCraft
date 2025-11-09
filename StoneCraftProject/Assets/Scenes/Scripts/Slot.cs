@@ -41,7 +41,14 @@ public class Slot : MonoBehaviour, IPointerDownHandler
             SetIconAlpha(1f);
         }
 
-        quantityText.text = item.quantity.ToString();
+        if (newItem.itemtype == ItemType.Pickaxe || newItem.itemtype == ItemType.Tool || newItem.itemtype == ItemType.Sculpture)
+        {
+            quantityText.text = "";
+        }
+        else
+        {
+            quantityText.text = item.quantity.ToString();
+        }
     }
 
     public void IncreaseQuantity(int count)

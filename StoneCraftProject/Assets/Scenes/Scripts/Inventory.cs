@@ -120,6 +120,7 @@ public class Inventory : MonoBehaviour
             return;
         }
 
+        SItem.quantity = 1;
         bool FindSlot = false;
 
         foreach (var slot in slotList)

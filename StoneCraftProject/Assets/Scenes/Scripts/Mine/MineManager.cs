@@ -13,8 +13,8 @@ public class MineManager : MonoBehaviour
     public bool GetIsMining {  get { return isMining; } }
 
     [SerializeField] Cart cart;
-
     [SerializeField] GameObject LimestoneObject;
+    [SerializeField] ParticleSystem MineEffect;
 
 
     private void Update()
@@ -28,6 +28,8 @@ public class MineManager : MonoBehaviour
     private void Start()
     {
         this.isMining = false;
+        MineEffect.Stop();
+        MineEffect.gameObject.SetActive(false);
     }
 
     public void StartMining(MineBase mine)
@@ -46,6 +48,10 @@ public class MineManager : MonoBehaviour
         currentMine.isBeingMined = true;
 
         playerManager.ChangePlayerState(PlayerState.MINING);
+
+        SetEffectPos();
+        MineEffect.gameObject.SetActive(true);
+        MineEffect.Stop();
 
         StartCoroutine(StartMiningAfterGrounded(mine));
     }
@@ -107,7 +113,7 @@ public class MineManager : MonoBehaviour
             StopCoroutine(miningCoroutine);
 
         PlayerInteract.Instance.DeleteFocus();
-
+        MineEffect.gameObject.SetActive(false);
         PlayerManager.Instance.ChangePlayerState(PlayerState.IDLE);
 
         Debug.Log("Ã¤±¼ Áß´ÜµÊ");
@@ -138,4 +144,14 @@ public class MineManager : MonoBehaviour
         Stone.SetActive(true);
     }
 
+
+    private void SetEffectPos()
+    {
+        MineEffect.transform.position = PlayerInteract.Instance.interactPos;
+    }
+
+    public void PlayMineEffect()
+    {
+        MineEffect.Play();
+    }
 }

@@ -66,6 +66,7 @@ public class ShelfSlot : MonoBehaviour, IInteractable
         SculpturePrefab.transform.localScale = new Vector3 (30f, 30f, 30f);
 
         SculptureData = PlayerManager.Instance.currentItem;
+        SculptureData.quantity = 1;
 
         // 인벤토리에서 아이템 삭제
         Inventory.Instance.RemoveSculptureItem(SculptureData.itemId);
