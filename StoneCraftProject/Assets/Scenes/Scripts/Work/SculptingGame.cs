@@ -214,8 +214,7 @@ public class SculptingGame : MonoBehaviour
 
             calculateValue();
 
-            // 인벤토리에 조각품 추가
-            WorkManager.Instance.GetSculpture("Sculpture", value);
+
 
             StartCoroutine(DisplayFinalResult(1));
         }
@@ -245,7 +244,8 @@ public class SculptingGame : MonoBehaviour
         {
             sculptingUI.OpenResultUI(1);
             stoneDisplay.RotateSculpture();
-            yield return new WaitForSecondsRealtime(4f);
+            yield return new WaitForSecondsRealtime(3f);
+            WorkManager.Instance.GetSculpture("Sculpture", value);
             WorkManager.Instance.StopSculpting();
         }
     }

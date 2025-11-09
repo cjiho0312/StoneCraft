@@ -91,6 +91,7 @@ public class MineManager : MonoBehaviour
             }
 
             Debug.Log($"{mine.gameObject.name}¿¡¼­ {s.stoneName} È¹µæ");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "LimeStone + 1");
 
             Reward(mine);
         }

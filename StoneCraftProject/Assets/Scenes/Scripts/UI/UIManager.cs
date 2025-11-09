@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Canvas WorkCanvas;
     [SerializeField] Canvas StoneStorageLogCanvas;
     [SerializeField] Canvas SculptingCanvas;
+    [SerializeField] Canvas GuideCanvas;
 
     PauseUI pauseUI;
     InventoryUI inventoryUI;
@@ -31,6 +32,7 @@ public class UIManager : MonoBehaviour
         WorkCanvas.gameObject.SetActive(true);
         StoneStorageLogCanvas.gameObject.SetActive(true);
         SculptingCanvas.gameObject.SetActive(true);
+        GuideCanvas.gameObject.SetActive(true);
 
         pauseUI = PauseCanvas.GetComponent<PauseUI>();
         inventoryUI = InventoryCanvas.GetComponent<InventoryUI>();

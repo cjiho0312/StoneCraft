@@ -180,16 +180,19 @@ public class WorkUI : MonoBehaviour
         if (SelectedStoneID == -1)
         {
             Debug.Log("돌을 골라주세요");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Select a stone!");
             return;
         }
         else if (SelectedSculptureID == -1)
         {
             Debug.Log("조각품을 골라주세요");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Select a sculpture!");
             return;
         }
         else if (Inventory.Instance.CanAddItem() == false)
         {
             Debug.Log("인벤토리가 가득 찼습니다!");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Inventory full!");
             return;
         }
 

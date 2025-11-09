@@ -28,8 +28,6 @@ public class SculptingUI : MonoBehaviour
     [SerializeField] Text SuccessText;
     Animator ToolAnimator;
 
-    int value;
-
     private void Awake()
     {
         SculptingUICanvas = GetComponent<Canvas>();
@@ -111,7 +109,7 @@ public class SculptingUI : MonoBehaviour
         SuccessText.text = "";
         SuccessText.enabled = false;
 
-        value = 0;
+
         ProgressBar.value = 0;
 
         if (t != null)

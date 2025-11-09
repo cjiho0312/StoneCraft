@@ -35,6 +35,7 @@ public class ShelfSlot : MonoBehaviour, IInteractable
             else
             {
                 Debug.Log("조각품만 전시할 수 있습니다!");
+                GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Only sculptures can be displayed!");
             }
         }
         else
@@ -46,6 +47,7 @@ public class ShelfSlot : MonoBehaviour, IInteractable
             else
             {
                 Debug.Log("인벤토리가 가득 찼습니다");
+                GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Inventory full!");
             }
         }
 

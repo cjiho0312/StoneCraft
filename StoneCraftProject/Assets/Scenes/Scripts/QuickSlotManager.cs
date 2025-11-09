@@ -1,5 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class QuickSlotManager : MonoBehaviour
 {
@@ -12,6 +15,8 @@ public class QuickSlotManager : MonoBehaviour
 
     [Header("Selection Highlight")]
     [SerializeField] private Image selectionHighlight;  // 선택 슬롯 하이라이트 이미지
+    [SerializeField] Text currentItemName; // 현재 들고있는 아이템 이름
+    Coroutine currentTextCoroutine;
 
     private void Awake()
     {
@@ -24,6 +29,7 @@ public class QuickSlotManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         UpdateSelectionUI();
         UpdatePlayerHand();
+        currentTextCoroutine = null;
     }
 
     private void Update()
@@ -54,7 +60,37 @@ public class QuickSlotManager : MonoBehaviour
         if (selectionHighlight != null && quickSlots.Length > 0)
         {
             selectionHighlight.transform.position = quickSlots[selectedIndex].transform.position;
+
+            if (quickSlots[selectedIndex].item != null)
+            {
+                if (currentTextCoroutine != null)
+                {
+                    StopCoroutine(currentTextCoroutine);
+                }
+                currentTextCoroutine = StartCoroutine(DisplayCurrentItemName());
+            }
         }
+    }
+
+    IEnumerator DisplayCurrentItemName()
+    {
+        currentItemName.text = quickSlots[selectedIndex].item.itemName;
+        currentItemName.color = Color.white;
+        currentItemName.enabled = true;
+
+        yield return new WaitForSeconds(0.5f);
+
+        float f = 1;
+        while (f > 0.1)
+        {
+            f -= 0.1f;
+            Color ColorAlhpa = currentItemName.color;
+            ColorAlhpa.a = f;
+            currentItemName.color = ColorAlhpa;
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        currentItemName.enabled = false;
     }
 
     private void UpdatePlayerHand()

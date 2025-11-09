@@ -18,11 +18,13 @@ public class LimestoneMine : MineBase
             }
             else
             {
+                GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "No cart nearby!");
                 Debug.Log("수레가 필요합니다!");
             }
         }
         else
         {
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Pickaxe required!");
             Debug.Log("곡괭이가 필요합니다!");
         }
     }

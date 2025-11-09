@@ -18,6 +18,7 @@ public class WorkTable : MonoBehaviour, IInteractable
         else
         {
             Debug.Log("도구가 필요합니다!");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Sculpting tool required!");
         }
     }
 

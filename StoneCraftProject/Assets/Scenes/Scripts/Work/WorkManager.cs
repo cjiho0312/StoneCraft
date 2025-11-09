@@ -33,14 +33,12 @@ public class WorkManager : MonoBehaviour
         CameraManager.Instance.OnSculptingCam(); // 카메라 옮기기
         sculptingUI.OpenSculptingUI(StoneID, SculptureID, toolGrade); // UI 출력
         PlayerManager.Instance.CanSeeHoldingTool(false);
-        Debug.Log("도구 볼 수 없음");
     }
 
     public void StopSculpting()
     {
         sculptingUI.CloseSculptingUI(); // UI 끄기
         PlayerManager.Instance.CanSeeHoldingTool(true);
-        Debug.Log("도구 볼 수 있음");
         CameraManager.Instance.OnMainCam();
         Pause.Instance.OffPause();
     }
@@ -57,6 +55,8 @@ public class WorkManager : MonoBehaviour
         S.itemId = nextSculptureID++;
         
         Inventory.Instance.AddItem(S);
+
+        GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "Sculpture + 1");
     }
 
 }

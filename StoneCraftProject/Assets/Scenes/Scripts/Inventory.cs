@@ -103,6 +103,7 @@ public class Inventory : MonoBehaviour
         if (remaining > 0)
         {
             Debug.Log("인벤토리가 가득 찼습니다!");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Inventory full!");
         }
 
         QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();

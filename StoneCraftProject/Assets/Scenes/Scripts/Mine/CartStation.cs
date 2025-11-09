@@ -15,10 +15,13 @@ public class CartStation : MonoBehaviour
         if (other.gameObject.CompareTag("Cart"))
         {
             cart = other.gameObject.GetComponent<Cart>();
-
             cart.TakeStones(); // 카트에서 돌 리스트 가져오기
+
+            if (!cart.isHaveStones()) return;
+
             StoneStorageManager.Instance.GetStonesInStorage(cart.stoneList); // 창고에 추가하기
             cart.ClearList();
+            GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "Stone added to storage");
         }
     }
 }

@@ -128,6 +128,18 @@ public class Cart : MonoBehaviour, IInteractable
         }
     }
 
+    public bool isHaveStones()
+    {
+        if (stoneList.Count == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public void ClearList()
     {
         stoneList.Clear(); // 리스트 클리어
