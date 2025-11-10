@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1f;
+        Application.targetFrameRate = 60;
         StartCoroutine(LoadGameData());
     }
 

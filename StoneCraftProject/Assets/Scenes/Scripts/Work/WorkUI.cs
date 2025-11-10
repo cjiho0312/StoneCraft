@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,6 +23,9 @@ public class WorkUI : MonoBehaviour
 
     [SerializeField] UnityEngine.UI.Text StoneEmptyText;
     [SerializeField] UnityEngine.UI.Text SculptureEmptyText;
+
+    [SerializeField] GameObject SelectedStoneS;
+    [SerializeField] GameObject SelectedSculptureS;
 
     [SerializeField] UnityEngine.UI.Text SelectedStoneText;
     [SerializeField] UnityEngine.UI.Text SelectedSculptureText;
@@ -181,12 +185,14 @@ public class WorkUI : MonoBehaviour
         {
             Debug.Log("돌을 골라주세요");
             GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Select a stone!");
+            StartCoroutine(Guiding(SelectedStoneS));
             return;
         }
         else if (SelectedSculptureID == -1)
         {
             Debug.Log("조각품을 골라주세요");
             GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Select a sculpture!");
+            StartCoroutine(Guiding(SelectedSculptureS));
             return;
         }
         else if (Inventory.Instance.CanAddItem() == false)
@@ -200,5 +206,12 @@ public class WorkUI : MonoBehaviour
 
         // 조각 실행
         WorkManager.Instance.StartSculpting(SelectedStoneID, SelectedSculptureID, toolGrade);
+    }
+
+    IEnumerator Guiding(GameObject S)
+    {
+        S.transform.localScale = new Vector3(1.07f, 1.07f, 1.07f);
+        yield return new WaitForSecondsRealtime(0.1f);
+        S.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 }
