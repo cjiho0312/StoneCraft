@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI Instance;
 
     Canvas InvenCanvas;
+    [SerializeField] Text MoneyText;
 
     private void Awake()
     {
@@ -16,6 +18,7 @@ public class InventoryUI : MonoBehaviour
     public void OpenInvenUI()
     {
         Pause.Instance.OnPause();
+        UpdateMoney();
         InvenCanvas.enabled = true;
 
         QuickSlotManager.Instance.SetActive(false);
@@ -32,6 +35,12 @@ public class InventoryUI : MonoBehaviour
         }
 
         QuickSlotManager.Instance.SetActive(true);
+    }
+
+    void UpdateMoney()
+    {
+        string m = PlayerManager.Instance.money.ToString(); 
+        MoneyText.text = m;
     }
 
 }

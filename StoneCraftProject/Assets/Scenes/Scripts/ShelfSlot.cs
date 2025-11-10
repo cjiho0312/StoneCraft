@@ -5,15 +5,8 @@ using static UnityEditor.Progress;
 public class ShelfSlot : MonoBehaviour, IInteractable
 {
     GameObject SculpturePrefab;
-    Item SculptureData;
-
-
-
-    private void Awake()
-    {
-
-    }
-
+    public Item SculptureData;
+    public bool canInteract = true;
 
     public void OnFocus()
     {
@@ -22,6 +15,12 @@ public class ShelfSlot : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
+        if (!canInteract)
+        {
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE, "Cannot modify shelves when the workshop is open!");
+            return;
+        }
+
         if (SculpturePrefab == null)
         {
             if (PlayerManager.Instance.currentItem == null)
@@ -91,4 +90,11 @@ public class ShelfSlot : MonoBehaviour, IInteractable
         SculptureData = null;
     }
 
+    public void DestroySculpture()
+    {
+        Destroy(SculptureData);
+        Destroy(SculpturePrefab);
+        SculpturePrefab = null;
+        SculptureData = null;
+    }
 }
