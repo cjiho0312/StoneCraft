@@ -13,13 +13,12 @@ public class TitleAnimation : MonoBehaviour
     public void Awake()
     {
         Start.SetActive(false);
-        Option.SetActive(false);
         Exit.SetActive(false);
 
         RectT = GetComponent<RectTransform>();
         RectT.anchoredPosition = new Vector2(0, yy);
         isFinished = false;
-        yy = 873;
+        yy = 910;
     }
 
     void Update()
@@ -29,9 +28,9 @@ public class TitleAnimation : MonoBehaviour
 
         RectT.anchoredPosition = new Vector2(0, yy);
 
-        yy -= 5;
+        yy -= 1;
 
-        if (RectT.anchoredPosition.y <= 256)
+        if (RectT.anchoredPosition.y <= 204)
         {
             isFinished = true;
         }
@@ -39,7 +38,6 @@ public class TitleAnimation : MonoBehaviour
         if(isFinished)
         {
             Start.SetActive(true);
-            Option.SetActive(true);
             Exit.SetActive(true);
         }
     }

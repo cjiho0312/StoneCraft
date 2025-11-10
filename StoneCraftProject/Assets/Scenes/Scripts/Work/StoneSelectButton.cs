@@ -15,6 +15,7 @@ public class StoneSelectButton : MonoBehaviour
         {
             WorkUI.Instance.SelectStone(index);
         }
+        AudioManager.Instance.PlayClick2Sound();
     }
 
     public void SaveStoneIndex(int i)

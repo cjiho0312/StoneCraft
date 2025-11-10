@@ -98,6 +98,7 @@ public class SculptingGame : MonoBehaviour
             float diff = Mathf.Abs(gameSize - checkSize) / (gameCircle.maxSize - gameCircle.minSize);
 
             
+            
             StartShowResult(diff);
             isClicking = false;
         }
@@ -181,12 +182,12 @@ public class SculptingGame : MonoBehaviour
         }
 
         yield return new WaitForSecondsRealtime(0.3f); // 애니메이션 기다려주기
+        AudioManager.Instance.PlaySculptingToolSound();
         PlayEffect();
 
         if (SuccessRate <= 0)
         {
             // 망가짐
-            Debug.Log("망가졌습니다!");
             CanClick = false;
             EndSculpting = true;
 
@@ -250,6 +251,7 @@ public class SculptingGame : MonoBehaviour
         if (index == 0)
         {
             sculptingUI.OpenResultUI(0);
+            stoneDisplay.StopDisplay();
             yield return new WaitForSecondsRealtime(1f);
             WorkManager.Instance.StopSculpting();
         }

@@ -71,7 +71,7 @@ public class ShelfSlot : MonoBehaviour, IInteractable
 
         // 인벤토리에서 아이템 삭제
         Inventory.Instance.RemoveSculptureItem(SculptureData.itemId);
-
+        AudioManager.Instance.PlayItemSound();
     }
 
     void GetSculpturefromSlot() // 슬롯에 있던 조각품 가져오기
@@ -86,8 +86,8 @@ public class ShelfSlot : MonoBehaviour, IInteractable
 
         Destroy(SculpturePrefab);
         SculpturePrefab = null;
-
         SculptureData = null;
+        AudioManager.Instance.PlayItemSound();
     }
 
     public void DestroySculpture()

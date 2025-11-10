@@ -21,6 +21,7 @@ public class CartStation : MonoBehaviour
 
             StoneStorageManager.Instance.GetStonesInStorage(cart.stoneList); // 창고에 추가하기
             cart.ClearList();
+            StartCoroutine(cart.PlayToStorageEffect());
             GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "Stone added to storage");
         }
     }

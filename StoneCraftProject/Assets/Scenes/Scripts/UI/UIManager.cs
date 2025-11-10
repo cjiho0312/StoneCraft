@@ -95,20 +95,23 @@ public class UIManager : MonoBehaviour
                 isOpenPause = false;
                 pauseUI.ClosePauseMenu();
             }
+
+            AudioManager.Instance.PlayUISound();
         }
 
         else if (Input.GetKeyDown(KeyCode.I))
         {
-            Debug.Log("Press I");
-
             if (isNotOpenAnyUI())
             {
                 inventoryUI.OpenInvenUI();
-                Debug.Log("Open Inven");
+                AudioManager.Instance.PlayUISound();
+
             }
             else if (InventoryCanvas.enabled)
             {
                 inventoryUI.CloseInvenUI();
+                AudioManager.Instance.PlayUISound();
+
             }
         }
 

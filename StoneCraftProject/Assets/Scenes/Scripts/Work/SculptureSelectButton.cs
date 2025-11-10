@@ -17,5 +17,7 @@ public class SculptrueSelectButton : MonoBehaviour
         {
             WorkUI.Instance.SelectSculpture(index);
         }
+        AudioManager.Instance.PlayClick2Sound();
+
     }
 }

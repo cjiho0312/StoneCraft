@@ -22,6 +22,7 @@ public class OpenSign : MonoBehaviour, IInteractable
             WorkshopManager.Instance.OpenWorkshop();
             text.text = "Open";
         }
+        AudioManager.Instance.PlayBellSound();
     }
 
     public void OnLoseFocus()

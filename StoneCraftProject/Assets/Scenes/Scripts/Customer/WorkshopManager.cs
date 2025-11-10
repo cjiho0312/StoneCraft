@@ -54,6 +54,9 @@ public class WorkshopManager : MonoBehaviour
         ShelfSlot S = shelf.ChoiceOneSculpture();
         int V = S.SculptureData.value;
         PlayerManager.Instance.AddMoney(V);
+        GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "Coin + " + V.ToString());
         S.DestroySculpture();
+
+        AudioManager.Instance.PlayCoinSound();
     }
 }

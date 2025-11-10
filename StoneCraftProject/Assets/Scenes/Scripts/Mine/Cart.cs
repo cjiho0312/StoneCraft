@@ -6,6 +6,7 @@ using UnityEngine;
 public class Cart : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject CreationArea;
+    [SerializeField] private ParticleSystem ToStorageEffect;
 
     public List<int> stoneList; // 카트가 가지고 있는 돌 ID 목록
 
@@ -17,6 +18,7 @@ public class Cart : MonoBehaviour, IInteractable
     {
         isPulling = false;
         blockInteract = false;
+        ToStorageEffect.gameObject.SetActive(false);
     }
 
     void Update()
@@ -143,5 +145,13 @@ public class Cart : MonoBehaviour, IInteractable
     public void ClearList()
     {
         stoneList.Clear(); // 리스트 클리어
+    }
+
+    public IEnumerator PlayToStorageEffect()
+    {
+        ToStorageEffect.gameObject.SetActive(true);
+        ToStorageEffect.Play();
+        yield return new WaitForSeconds(2f);
+        ToStorageEffect.gameObject.SetActive(false);
     }
 }

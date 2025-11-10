@@ -196,6 +196,8 @@ public class WorkUI : MonoBehaviour
             return;
         }
 
+        AudioManager.Instance.PlayClick2Sound();
+
         // 조각 실행
         WorkManager.Instance.StartSculpting(SelectedStoneID, SelectedSculptureID, toolGrade);
     }
