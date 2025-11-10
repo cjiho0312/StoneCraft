@@ -19,6 +19,8 @@ public class TitleAnimation : MonoBehaviour
         RectT.anchoredPosition = new Vector2(0, yy);
         isFinished = false;
         yy = 910;
+
+        Application.targetFrameRate = 60;
     }
 
     void Update()
@@ -28,7 +30,7 @@ public class TitleAnimation : MonoBehaviour
 
         RectT.anchoredPosition = new Vector2(0, yy);
 
-        yy -= 1;
+        yy -= 6;
 
         if (RectT.anchoredPosition.y <= 204)
         {
