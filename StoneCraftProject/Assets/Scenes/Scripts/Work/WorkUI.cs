@@ -175,6 +175,7 @@ public class WorkUI : MonoBehaviour
         SelectedSculptureText.text = "";
         SelectedToolText.text = "";
         SelectedStoneID = -1;
+        SelectedSculptureID = -1;
         toolGrade = -1;
     }
 
