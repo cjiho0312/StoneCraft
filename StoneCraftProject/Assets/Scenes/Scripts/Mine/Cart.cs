@@ -7,29 +7,43 @@ public class Cart : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject CreationArea;
     [SerializeField] private ParticleSystem ToStorageEffect;
+    [SerializeField] private Transform InitPos;
+
+    [SerializeField] HoldingCartArea holdingArea;
 
     public List<int> stoneList; // 카트가 가지고 있는 돌 ID 목록
 
     private bool isPulling;
     private bool blockInteract;
+    private bool isOnFocus;
+
     public Vector3 GetCreationAreaPos() { return CreationArea.transform.position; }
 
     private void Awake()
     {
         isPulling = false;
         blockInteract = false;
+        isOnFocus = false;
         ToStorageEffect.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        if (isPulling)
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
         {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                InitCartRot();
-            }
+            InitCartPos();
+        }
+        else if (Input.GetKeyDown(KeyCode.R) && isOnFocus)
+        {
+            InitCartRot();
+        }
+        else if (isPulling)
+        {
             if (!Input.GetKey(KeyCode.E) && !Input.GetMouseButton(0))
+            {
+                StopPullCart();
+            }
+            if (!holdingArea.IsInCol())
             {
                 StopPullCart();
             }
@@ -39,6 +53,8 @@ public class Cart : MonoBehaviour, IInteractable
     public void OnFocus()
     {
         if (isPulling) { return; }
+
+        isOnFocus = true;
 
         Debug.Log("On Focus");
         AimSwitch.Instance.ChangeAim(AimState.ELSE);
@@ -51,6 +67,12 @@ public class Cart : MonoBehaviour, IInteractable
         if (!Input.GetKey(KeyCode.E) && !Input.GetMouseButton(0))
         { return; }
 
+        if (!holdingArea.IsInCol())
+        {
+            GuideTextManager.Instance.MakeGuide(GuideSub.GUIDE,"Stand by the handle side of the cart!");
+            return;
+        }
+
         Debug.Log("On Interact");
         StartPullCart();
     }
@@ -58,6 +80,8 @@ public class Cart : MonoBehaviour, IInteractable
     public void OnLoseFocus()
     {
         if (isPulling) { return; }
+
+        isOnFocus = false;
 
         Debug.Log("Off Focus");
         AimSwitch.Instance.ChangeAim(AimState.NONE);
@@ -107,6 +131,13 @@ public class Cart : MonoBehaviour, IInteractable
         StopPullCart();
         gameObject.transform.rotation = Quaternion.identity;
         gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1, gameObject.transform.position.z);
+    }
+
+    void InitCartPos()
+    {
+        StopPullCart();
+        gameObject.transform.position = InitPos.position;
+        InitCartPos();
     }
 
     IEnumerator BlockInteractShort()
