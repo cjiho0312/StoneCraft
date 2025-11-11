@@ -14,6 +14,7 @@ public class MineManager : MonoBehaviour
 
     [SerializeField] Cart cart;
     [SerializeField] GameObject LimestoneObject;
+    [SerializeField] GameObject MarbleObject;
     [SerializeField] ParticleSystem MineEffect;
 
 
@@ -90,8 +91,7 @@ public class MineManager : MonoBehaviour
                 break;
             }
 
-            Debug.Log($"{mine.gameObject.name}¿¡¼­ {s.stoneName} È¹µæ");
-            GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "LimeStone + 1");
+            GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, s.stoneName + " + 1");
 
             Reward(mine);
         }
@@ -132,7 +132,8 @@ public class MineManager : MonoBehaviour
                 RewardStone = LimestoneObject;
                 break;
 
-            case 102:
+            case 102: // Marble
+                RewardStone = MarbleObject;
                 break;
 
             default:

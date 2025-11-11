@@ -12,13 +12,11 @@ public abstract class MineBase : MonoBehaviour, IInteractable
 
     public void OnFocus()
     {
-        Debug.Log("On Focus");
         AimSwitch.Instance.ChangeAim(AimState.MINE);
     }
 
     public void OnLoseFocus()
     {
-        Debug.Log("Off Focus");
         AimSwitch.Instance.ChangeAim(AimState.NONE);
     }
 
@@ -26,7 +24,6 @@ public abstract class MineBase : MonoBehaviour, IInteractable
     
     public virtual Stone GetStoneType()
     {
-        Debug.Log($"Mining {StoneType.stoneName}");
         return StoneType;
     }
 }

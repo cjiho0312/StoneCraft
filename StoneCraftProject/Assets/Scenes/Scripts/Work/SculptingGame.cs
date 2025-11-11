@@ -65,10 +65,20 @@ public class SculptingGame : MonoBehaviour
         this.toolGrade = toolGrade;
         
         //프로토타입용
-        stoneValue = 5;
+
+        if (StoneID == 101)
+        {
+            stoneValue = 5;
+        }
+        if (StoneID == 102)
+        {
+            stoneValue = 10;
+        }
+
         sculptureValue = 5;
         //----
 
+        stoneDisplay.GetStoneID(StoneID);
         stoneDisplay.DisplaySculpture(currentStep);
     }
 
@@ -97,8 +107,6 @@ public class SculptingGame : MonoBehaviour
 
             float diff = Mathf.Abs(gameSize - checkSize) / (gameCircle.maxSize - gameCircle.minSize);
 
-            
-            
             StartShowResult(diff);
             isClicking = false;
         }
@@ -262,7 +270,7 @@ public class SculptingGame : MonoBehaviour
             stoneDisplay.RotateSculpture();
             SuccessEffect.Play();
             yield return new WaitForSecondsRealtime(3f);
-            WorkManager.Instance.GetSculpture("Sculpture", value);
+            WorkManager.Instance.GetSculpture("Sculpture", value, stoneID);
             WorkManager.Instance.StopSculpting();
         }
     }

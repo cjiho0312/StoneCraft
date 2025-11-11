@@ -4,7 +4,7 @@ public class NameStrData : MonoBehaviour
 {
     public static NameStrData Instance;
 
-    string[] StoneNameString = { "Limestone", ".", ".", ".", ".", "." };
+    string[] StoneNameString = { "Limestone", "Marble", ".", ".", ".", "." };
     string[] ToolGradeString = { "Wood", "Stone", "Iron", "Diamond" };
 
     private void Awake()

@@ -13,5 +13,11 @@ public class ForDebug : MonoBehaviour
             list.Add(101);
             StoneStorageManager.Instance.GetStonesInStorage(list);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            List<int> list = new List<int>();
+            list.Add(102);
+            StoneStorageManager.Instance.GetStonesInStorage(list);
+        }
     }
 }

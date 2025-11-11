@@ -1,4 +1,5 @@
 using System.Globalization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WorkManager : MonoBehaviour
@@ -43,20 +44,20 @@ public class WorkManager : MonoBehaviour
         Pause.Instance.OffPause();
     }
 
-    public void GetSculpture(string name, int value) // 조각품 만들기
+    public void GetSculpture(string name, int value, int stoneID) // 조각품 만들기
     {
         // 프로토타입용
         Item S = Instantiate(SculptureItem);
-        GameObject G = sculptingStoneDisplay.GetSculpturePrefab();
+        GameObject G = sculptingStoneDisplay.GetSculpturePrefab(stoneID);
 
         S.holdingPrefab = G;
+        S.holdingPrefab.SetActive(true);
         S.itemName = "Sculpture";
         S.value = value;
         S.itemId = nextSculptureID++;
-        
-        Inventory.Instance.AddItem(S);
+
+        Inventory.Instance.AddSculptureItem(S);
 
         GuideTextManager.Instance.MakeGuide(GuideSub.GETITEM, "Sculpture + 1");
     }
-
 }

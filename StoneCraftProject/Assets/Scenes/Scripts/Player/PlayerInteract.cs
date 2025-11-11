@@ -36,28 +36,44 @@ public class PlayerInteract : MonoBehaviour
 
         Debug.DrawRay(ray.origin, ray.direction * interactDistance, Color.yellow);
 
-        if (Physics.Raycast(ray, out hit, interactDistance, interactLayer))
+        if (Physics.Raycast(ray, out hit, interactDistance, ~0))
         {
-            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            GameObject hitObject = hit.collider.gameObject;
 
-            if (interactable == null)
-                return;
-
-            if (interactable != nowFocus )
+            if (((1 << hitObject.layer) & interactLayer) != 0)
             {
-                if (nowFocus != null) nowFocus.OnLoseFocus();
-                nowFocus = interactable;
-                nowFocus.OnFocus();
+                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+
+                if (interactable != null)
+                {
+                    if (interactable != nowFocus)
+                    {
+                        if (nowFocus != null) nowFocus.OnLoseFocus();
+                        nowFocus = interactable;
+                        nowFocus.OnFocus();
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
+                    {
+                        interactPos = hit.point;
+                        nowFocus.OnInteract();
+                        nowFocus = null;
+                    }
+
+                    return;
+                }
             }
 
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0))
+            if (nowFocus != null)
             {
-                interactPos = hit.point;
-                nowFocus.OnInteract();
+                nowFocus.OnLoseFocus();
+                nowFocus = null;
             }
+
         }
         else
         {
+            // 레이캐스트가 아무것도 안 맞았을 때
             if (nowFocus != null)
             {
                 nowFocus.OnLoseFocus();

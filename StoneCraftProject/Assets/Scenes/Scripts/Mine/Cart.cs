@@ -74,6 +74,7 @@ public class Cart : MonoBehaviour, IInteractable
         }
 
         Debug.Log("On Interact");
+        AimSwitch.Instance.ChangeAim(AimState.NONE);
         StartPullCart();
     }
 
@@ -122,6 +123,8 @@ public class Cart : MonoBehaviour, IInteractable
 
         PlayerManager.Instance.CanSeeHoldingTool(true);
         PlayerInteract.Instance.SetCanInteract(true);
+
+        AimSwitch.Instance.ChangeAim(AimState.NONE);
 
         Debug.Log("¼ö·¹ ²ø±â ³¡");
     }
