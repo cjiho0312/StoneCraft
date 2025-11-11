@@ -49,19 +49,27 @@ public class InventoryDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandl
 
         if (eventData.pointerEnter != null)
         {
-            Slot targetSlot = eventData.pointerEnter.GetComponent<Slot>();
+            Slot targetSlot = eventData.pointerEnter.gameObject.GetComponentInParent<Slot>();
+
             if (targetSlot != null)
             { SwapItems(originSlot, targetSlot); }
+            else
+            {
+                Debug.Log("target Slot이 null입니다");
+            }
+        }
+        else
+        {
+            Debug.Log("eventData.pointerEnter이 null입니다");
         }
 
-        originSlot = null;
+            originSlot = null;
     }
 
     private void UpdateDragPosition(PointerEventData eventData)
     {
         // 스크린 좌표를 패널 로컬 좌표로 변환
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            panel, eventData.position, eventData.pressEventCamera, out Vector2 localPoint))
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(panel, eventData.position, eventData.pressEventCamera, out Vector2 localPoint))
         {
             dragIcon.GetComponent<RectTransform>().localPosition = localPoint;
         }
@@ -72,6 +80,9 @@ public class InventoryDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandl
         var temp = a.item;
         a.SetItem(b.item);
         b.SetItem(temp);
+        Debug.Log("Swap 완료");
+
+        QuickSlotManager.Instance?.UpdateQuickSlotsFromInventory();
     }
 
     public void CancelDrag()
