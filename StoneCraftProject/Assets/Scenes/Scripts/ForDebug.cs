@@ -7,13 +7,13 @@ public class ForDebug : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) // 돌 추가
+        if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.Alpha1)) // 돌 추가
         {
             List <int> list = new List<int>();
             list.Add(101);
             StoneStorageManager.Instance.GetStonesInStorage(list);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.Alpha2))
         {
             List<int> list = new List<int>();
             list.Add(102);

@@ -29,7 +29,7 @@ public class Cart : MonoBehaviour, IInteractable
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.R))
         {
             InitCartPos();
         }
