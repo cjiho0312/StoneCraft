@@ -39,6 +39,9 @@ public class PlayerSaveManager : MonoBehaviour
         {
             Debug.LogWarning("[PlayerSave] 历厘 颇老 绝澜. 货 单捞磐 积己");
             playerData = new PlayerData();
+            playerData.posX = -14.7f;
+            playerData.posY = -0.7f;
+            playerData.posZ = 13.5f;
             return;
         }
 

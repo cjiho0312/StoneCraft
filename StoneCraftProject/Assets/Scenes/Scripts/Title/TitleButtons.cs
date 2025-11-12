@@ -15,7 +15,8 @@ public class TitleButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         audioSource.clip = Click;
         audioSource.Play();
         Debug.Log("Start Button");
-        SceneManager.LoadScene("TestScene");
+        LoadingManager.Instance.StartLoading();
+        //SceneManager.LoadScene("TestScene");
     }
 
     public void OptionButton()
