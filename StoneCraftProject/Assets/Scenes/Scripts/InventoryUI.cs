@@ -7,6 +7,7 @@ public class InventoryUI : MonoBehaviour
 
     Canvas InvenCanvas;
     [SerializeField] Text MoneyText;
+    [SerializeField] Sprite EmptyIcon;
 
     private void Awake()
     {
@@ -35,6 +36,11 @@ public class InventoryUI : MonoBehaviour
         }
 
         QuickSlotManager.Instance.SetActive(true);
+    }
+
+    public Sprite GetEmptyIcon()
+    {
+        return EmptyIcon;
     }
 
     void UpdateMoney()

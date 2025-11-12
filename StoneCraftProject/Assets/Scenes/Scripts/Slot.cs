@@ -84,7 +84,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler
         OnCleared?.Invoke(this, clearedItemId);
 
         item = null;
-        icon.sprite = null;
+        icon.sprite = InventoryUI.Instance.GetEmptyIcon();
         SetIconAlpha(0f);
         quantityText.text = "";
 

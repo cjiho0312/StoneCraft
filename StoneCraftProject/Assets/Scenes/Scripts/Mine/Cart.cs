@@ -105,8 +105,6 @@ public class Cart : MonoBehaviour, IInteractable
         PlayerManager.Instance.ChangePlayerState(PlayerState.PULLINGCART);
 
         StartCoroutine(BlockInteractShort());
-
-        Debug.Log("수레 끌기 시작");
     }
 
     void StopPullCart()
@@ -125,8 +123,6 @@ public class Cart : MonoBehaviour, IInteractable
         PlayerInteract.Instance.SetCanInteract(true);
 
         AimSwitch.Instance.ChangeAim(AimState.NONE);
-
-        Debug.Log("수레 끌기 끝");
     }
 
     void InitCartRot() // 수레 세우기
