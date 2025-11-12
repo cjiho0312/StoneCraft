@@ -26,17 +26,23 @@ public class LoadingManager : MonoBehaviour
     private IEnumerator LoadLoginScene()
     {
         float startTime = Time.time;
-
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("TestScene");
         asyncLoad.allowSceneActivation = false;
 
-        while (Time.time - startTime < minLoadingTime || !asyncLoad.isDone)
+        bool readyToActivate = false;
+
+        while (!asyncLoad.isDone)
         {
-            if (asyncLoad.progress >= 0.9f && Time.time - startTime >= minLoadingTime)
+            bool timeReady = Time.time - startTime >= minLoadingTime;
+            bool loadReady = asyncLoad.progress >= 0.9f;
+
+            if (!readyToActivate && timeReady && loadReady)
             {
+                readyToActivate = true;
                 yield return new WaitForSeconds(0.5f);
                 asyncLoad.allowSceneActivation = true;
             }
+
             yield return null;
         }
 
