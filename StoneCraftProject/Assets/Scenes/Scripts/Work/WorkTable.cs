@@ -4,7 +4,7 @@ public class WorkTable : MonoBehaviour, IInteractable
 {
     public void OnFocus()
     {
-        AimSwitch.Instance.ChangeAim(AimState.ELSE);
+        AimSwitch.Instance.ChangeAim(AimState.SCULPT);
     }
 
     public void OnInteract()

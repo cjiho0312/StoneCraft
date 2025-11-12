@@ -38,7 +38,7 @@ public class AimSwitch : MonoBehaviour
         {
             { AimState.NONE, aimNone },
             { AimState.MINE, aimMine },
-            //{ AimState.SCULPT, aimSculpt },
+            { AimState.SCULPT, aimSculpt },
             { AimState.ELSE, aimElse }
         };
 

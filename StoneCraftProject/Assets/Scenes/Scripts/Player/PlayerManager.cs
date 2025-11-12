@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Unity.VisualScripting;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public enum PlayerState
@@ -184,7 +185,10 @@ public class PlayerManager : MonoBehaviour
                     playerMoveController.isCanMove = true;
                     currentState = PlayerState.JUMPING;
                     playerAnimator.SetTrigger("Jumping");
-                    ToolsAni("N");
+                    //ToolsAni("N");
+                    if (ToolsAnimator != null)
+                        ToolsAnimator.SetTrigger("Jumping");
+
                     break;
 
                 case PlayerState.MINING:
