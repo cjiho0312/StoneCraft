@@ -7,6 +7,7 @@ public class LoadingManager : MonoBehaviour
     static public LoadingManager Instance;
 
     [SerializeField] public GameObject loadingCanvas;
+    [SerializeField] AudioSource Bgm;
     public float minLoadingTime = 1.5f;
 
     private void Start()
@@ -18,6 +19,7 @@ public class LoadingManager : MonoBehaviour
     public void StartLoading()
     {
         loadingCanvas.SetActive(true);
+        Bgm.Stop();
         StartCoroutine(LoadLoginScene());
     }
 

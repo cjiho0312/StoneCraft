@@ -30,7 +30,7 @@ public class Customer : MonoBehaviour
             yield return null; // 다음 프레임까지 대기
         }
 
-        if (WorkshopManager.Instance.IsExistSculpture())
+        if (WorkshopManager.Instance.IsExistSculpture() && WorkshopManager.Instance.isWorkshopOpen)
         {
             // 구매
             StartCoroutine(GoPath2());
